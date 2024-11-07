@@ -1,0 +1,113 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+}
+
+/* Header styling */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #007bff;
+}
+
+.logo {
+    width: 50px;
+    height: auto;
+}
+
+.profile-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: white;
+    padding: 5px;
+}
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    font-size: 32px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: #f5f5f5;
+    text-align: center;
+    flex-grow: 1;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.tab.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Order Summary */
+.order-summary {
+    margin-top: 20px;
+}
+
+.order-summary p {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+}
+
+.order-summary hr {
+    margin: 10px 0;
+}
+
+.order-summary h3 {
+    font-size: 20px;
+    color: #333;
+}
+
+/* Actions (buttons) */
+.actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.back-btn, .proceed-btn {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.back-btn:hover, .proceed-btn:hover {
+    background-color: #0056b3;
+}
+
+.shipping-address {
+    font-size: 16px;
+    margin-top: 15px;
+}

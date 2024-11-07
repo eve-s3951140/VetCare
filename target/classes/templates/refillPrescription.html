@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purchase Medicine</title>
+    <link rel="stylesheet" href="/css/refillPrescription.css" />
+  </head>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the userId and petOwnerId from local storage
+      const userId = localStorage.getItem("userId");
+      const petOwnerId = localStorage.getItem("petOwnerId");
+
+      // Set the link for the logo and profile icon
+      document.querySelector(
+        "#logo-link"
+      ).href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+      document.querySelector(
+        "#profile-link"
+      ).href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+    });
+  </script>
+  <body>
+    <!-- Header Section -->
+    <div class="header">
+      <a href="/" id="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="#" class="profile-link" id="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="container">
+      <h1>Purchase Medicine</h1>
+
+      <div class="tabs">
+        <div class="tab active">1. Shipment Details</div>
+        <div class="tab">2. Payment Details</div>
+        <div class="tab">3. Review and checkout</div>
+      </div>
+
+      <div class="content">
+        <!-- Address Form Section -->
+        <div class="address">
+          <h2>Your address</h2>
+          <form>
+            <div class="form-group">
+              <label for="state">State/Territory</label>
+              <input type="text" id="state" />
+            </div>
+
+            <div class="form-group">
+              <label for="suburb">Suburb/Town</label>
+              <input type="text" id="suburb" />
+              <label for="postcode" style="margin-top: 15px">Postcode</label>
+              <input type="text" id="postcode" />
+            </div>
+
+            <div class="form-group">
+              <label for="address1">Shipping address line 1</label>
+              <input type="text" id="address1" />
+            </div>
+
+            <div class="form-group">
+              <label for="address2">Shipping address line 2</label>
+              <input type="text" id="address2" />
+            </div>
+          </form>
+        </div>
+
+        <!-- Order Summary Section -->
+        <div class="order-summary">
+          <h2>My order</h2>
+          <div th:if="${selectedPrescription != null}">
+            <!-- Remove $ from price and format as number -->
+            <p
+              th:text="${selectedPrescription.medicine.name} + ' - Bottle'"
+            ></p>
+            <p th:text="${selectedPrescription.medicine.price}"></p>
+            <hr />
+            <!-- Display the total price -->
+            <h3>
+              Total:
+              <span th:text="${selectedPrescription.medicine.price}"></span>
+            </h3>
+
+            <form action="/payment" method="get">
+              <input
+                type="hidden"
+                name="prescriptionId"
+                th:value="${selectedPrescription.id}"
+              />
+              <button class="next-btn" type="submit">
+                Proceed to payment details
+              </button>
+            </form>
+          </div>
+          <div th:if="${errorMessage != null}">
+            <p th:text="${errorMessage}"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Back Button -->
+    <div class="buttons">
+      <button type="button" class="back-button" onclick="window.history.back()">
+        Back
+      </button>
+    </div>
+  </body>
+</html>

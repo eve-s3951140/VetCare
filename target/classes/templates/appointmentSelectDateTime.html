@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Appointment Scheduling</title>
+    <link rel="stylesheet" href="/css/newAppointment.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the userId and petOwnerId from local storage
+        const userId = localStorage.getItem("userId");
+        const petOwnerId = localStorage.getItem("petOwnerId");
+
+        // Set the links for the logo and profile icon
+        document.querySelector(".logo-link").href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+        document.querySelector(".profile-link").href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+
+        const timeSlots = document.querySelectorAll(".time-slot");
+        const urlParams = new URLSearchParams(window.location.search);
+        const appointmentTypeId = urlParams.get("appointmentTypeId");
+        const vetId = urlParams.get("vetId");
+
+        // continue button logic
+        document
+          .querySelector(".continue-button")
+          .addEventListener("click", function () {
+            const selectedSlot = document.querySelector(".time-slot.selected");
+            const selectedDate =
+              document.querySelector("#appointment-date").value; // Get the date
+
+            if (!selectedDate) {
+              alert("Please select a date.");
+              return;
+            }
+
+            if (selectedSlot) {
+              // const selectedTime = selectedSlot.getAttribute('data-time');
+              const selectedAppointmentTypeId = localStorage.getItem(
+                "selectedAppointmentTypeId"
+              );
+              const selectedPetId = localStorage.getItem("selectedPetId");
+              const selectedVetId = localStorage.getItem("selectedVetId");
+              const selectedAppointmentDate = localStorage.getItem(
+                "selectedAppointmentDate"
+              );
+              const selectedAppointmentTime = localStorage.getItem(
+                "selectedAppointmentTime"
+              );
+              const selectedAppointmentTypeDuration = localStorage.getItem(
+                "selectedAppointmentTypeDuration"
+              );
+
+              // Redirect to confirmation page
+              window.location.href = `/appointment/new/confirmation?selectedAppointmentTypeId=${selectedAppointmentTypeId}&selectedPetId=${selectedPetId}&selectedVetId=${selectedVetId}&selectedAppointmentDate=${selectedAppointmentDate}&selectedAppointmentTime=${selectedAppointmentTime}&selectedAppointmentTypeDuration=${selectedAppointmentTypeDuration}`;
+            } else {
+              alert("Please select a time to continue.");
+            }
+          });
+
+        // back button logic
+        document
+          .querySelector(".back-button")
+          .addEventListener("click", function () {
+            const selectedAppointmentTypeId = localStorage.getItem(
+              "selectedAppointmentTypeId"
+            );
+            const selectedClinicId = localStorage.getItem("selectedClinicId");
+
+            // Redirect back to the veterinarian selection page
+            window.location.href = `/appointment/new/select_veterinarian?appointmentTypeId=${selectedAppointmentTypeId}&clinicId=${selectedClinicId}`;
+          });
+      });
+
+      window.onload = function () {
+        var today = new Date().toISOString().split("T")[0];
+        var dateInput = document.getElementById("appointment-date");
+        // set minimum date to today's date when selecting date
+        dateInput.min = today;
+        // set date value to today's date when selecting date
+        dateInput.value = today;
+      };
+
+      // function for adding onclick event for time slot
+      function addClickEventToTimeSlots() {
+        const timeSlots = document.querySelectorAll(".time-slot");
+        timeSlots.forEach((slot) => {
+          slot.addEventListener("click", function () {
+            // Remove 'selected' class from all time slots
+            timeSlots.forEach((s) => s.classList.remove("selected"));
+
+            // Add 'selected' class to the clicked time slot
+            slot.classList.add("selected");
+
+            // store selected time into local storage
+            localStorage.setItem("selectedAppointmentTime", slot.dataset.time);
+          });
+        });
+      }
+
+      function handleDateChange() {
+        const selectedVetId = localStorage.getItem("selectedVetId");
+        const timeContainer = document.getElementById("time-container");
+        const messageElement = document.querySelector(
+          ".time-availability-message"
+        );
+
+        // Clear existing time slots
+        timeContainer.innerHTML = "";
+
+        var dateValue = document.getElementById("appointment-date").value;
+
+        // store selected date into local storage
+        localStorage.setItem("selectedAppointmentDate", dateValue);
+
+        // fetch availability detials for vet id if exists for the date
+        fetch(`/api/vet_availability/${selectedVetId}?date=${dateValue}`)
+          .then((response) => response.json())
+          .then((data) => {
+            if (data && data.availability) {
+              // retrieve startTime and endTime
+              const vetStartTime = data.availability.startTime;
+              const vetEndTime = data.availability.endTime;
+              console.log(
+                `Start Time: ${vetStartTime}, End Time: ${vetEndTime}`
+              );
+
+              // retrieve all scheduled appointment appointment for the vet id and date
+              getAppointmentTime(
+                selectedVetId,
+                dateValue,
+                vetStartTime,
+                vetEndTime
+              );
+            } else {
+              console.log(
+                "No availability found for the specified date and vet ID."
+              );
+              // Display message when no availability is found
+              messageElement.textContent =
+                "No time availability found. Please select a new date.";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching availability:", error);
+          });
+      }
+
+      function getAppointmentTime(
+        selectedVetId,
+        dateValue,
+        vetStartTime,
+        vetEndTime
+      ) {
+        // fetch scheduled appointment details based on userId through the API
+        fetch(`/api/appointment/${selectedVetId}?date=${dateValue}`)
+          .then((response) => response.json())
+          .then((data) => {
+            const scheduledTime = {};
+            if (data.length > 0) {
+              data.forEach((appointment) => {
+                scheduledTime[appointment.startTime] = appointment.endTime;
+              });
+            }
+            console.log(scheduledTime);
+            // calculate the available time slot suing the data provided
+            getAppointmentTimeSlot(scheduledTime, vetStartTime, vetEndTime);
+          })
+          .catch((error) => {
+            console.error("Error fetching appointments:", error);
+          });
+      }
+
+      function getAppointmentTimeSlot(scheduledTime, vetStartTime, vetEndTime) {
+        // appointment duration in minute
+        const selectedAppointmentTypeDuration = localStorage.getItem(
+          "selectedAppointmentTypeDuration"
+        );
+
+        // array to stroe available start time for new appointment
+        const availableStartTime = [];
+
+        // convert vet start time to Date obj
+        const vetStartTimeDate = new Date(`1970-01-01T${vetStartTime}Z`);
+        // convert vet end time to Date obj
+        const vetEndTimeDate = new Date(`1970-01-01T${vetEndTime}Z`);
+
+        // assign newStartTime to vet start time
+        let newStartTime = vetStartTimeDate;
+
+        // Iterate each scheduled appointment
+        for (const [start, end] of Object.entries(scheduledTime)) {
+          // convert scheduled appointment start time to Date obj
+          const startTime = new Date(`1970-01-01T${start}Z`);
+          // convert scheduled appointment end time to Date obj
+          const endTime = new Date(`1970-01-01T${end}Z`);
+
+          // Get all available slots between newStartTime and the start of the current appointment
+          while (
+            startTime - newStartTime >=
+            selectedAppointmentTypeDuration * 60000
+          ) {
+            // Add the start time into availableStartTime
+            availableStartTime.push(newStartTime.toISOString().substr(11, 8));
+            // increment the newStartTime by appointment type duration
+            newStartTime = new Date(
+              newStartTime.getTime() + selectedAppointmentTypeDuration * 60000
+            );
+          }
+
+          // assign the current applointment end time to newStartTime
+          newStartTime = endTime;
+        }
+
+        // Get all available slots between the last scheduled appointment and vet end time
+        while (
+          vetEndTimeDate - newStartTime >=
+          selectedAppointmentTypeDuration * 60000
+        ) {
+          // Add the start time into availableStartTime
+          availableStartTime.push(newStartTime.toISOString().substr(11, 8));
+          // increment the newStartTime by appointment type duration
+          newStartTime = new Date(
+            newStartTime.getTime() + selectedAppointmentTypeDuration * 60000
+          );
+        }
+
+        console.log("availableStartTime: ", availableStartTime);
+
+        // display available start time slot on page
+        displayStartTimeSlot(availableStartTime);
+      }
+
+      // convert time into 12 hour format
+      function convertTo12HourFormat(time) {
+        const [hours, minutes] = time.split(":");
+        const period = hours >= 12 ? "PM" : "AM";
+        const adjustedHours = hours % 12 || 12; // Convert 0 to 12 for midnight
+        return `${adjustedHours}:${minutes} ${period}`;
+      }
+
+      function displayStartTimeSlot(availableStartTime) {
+        const messageElement = document.querySelector(
+          ".time-availability-message"
+        );
+        if (availableStartTime.length > 0) {
+          messageElement.textContent = "Time available:";
+          const timeContainer = document.getElementById("time-container");
+
+          // display all available time slot in box
+          availableStartTime.forEach((slot) => {
+            const slotElement = document.createElement("div");
+            slotElement.className = "time-slot";
+            slotElement.dataset.time = slot;
+            slotElement.textContent = convertTo12HourFormat(slot);
+            timeContainer.appendChild(slotElement);
+          });
+
+          // Add click event to the time slots
+          addClickEventToTimeSlots();
+        } else {
+          messageElement.textContent =
+            "No time availability found. Please select a new date.";
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="login" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>New Appointment Scheduling</h1>
+      <h3>Select Date and Time:</h3>
+
+      <!-- Date Picker (For the sake of simplicity, using a simple date input) -->
+      <input
+        type="date"
+        id="appointment-date"
+        name="appointment-date"
+        min="2024-09-19"
+        value="2024-09-29"
+        onchange="handleDateChange()"
+      />
+
+      <h3 class="time-availability-message"></h3>
+
+      <div class="time-container" id="time-container"></div>
+
+      <div class="buttons">
+        <button type="button" class="back-button">Back</button>
+        <button type="button" class="continue-button">Continue</button>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Articles Page</title>
+    <link rel="stylesheet" href="/css/articlesPage.css" />
+  </head>
+  <script>
+    // Function to go back to the previous page when the back button is clicked
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the userId and petOwnerId from local storage
+      const userId = localStorage.getItem("userId");
+      const petOwnerId = localStorage.getItem("petOwnerId");
+
+      const backButton = document.getElementById("backButton");
+
+      backButton.addEventListener("click", function () {
+        window.history.back();
+      });
+
+      const profileLink = document.getElementById("profileLink");
+      const logoLink = document.getElementById("logoLink");
+
+      if (profileLink) {
+        profileLink.addEventListener("click", function () {
+          window.location.href = "/petOwnerProfile?petOwnerId=" + petOwnerId;
+        });
+      }
+
+      if (logoLink) {
+        logoLink.addEventListener("click", function () {
+          window.location.href =
+            "/petOwnerWelcome?userId=" + userId + "&petOwnerId=" + petOwnerId;
+        });
+      }
+    });
+
+    // Function to handle page navigation
+    function navigateTo(url) {
+      window.location.href = url;
+    }
+  </script>
+  <body>
+    <div class="header">
+      <a id="logoLink">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a class="profile-link" id="profileLink">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="articles-section">
+      <h1>Articles</h1>
+      <!-- Main article with onclick navigation -->
+      <div class="main-article" onclick="navigateTo('/article3')">
+        <img src="/images/article10.jpg" alt="Main article image" />
+        <div class="main-article-content">
+          <h2>10 Dangers of Fleas, Ticks and Mosquitoes</h2>
+          <p>
+            All pets—even indoor pets—are at risk of fleas, ticks, and
+            mosquitoes. These little bloodsuckers can hitch a ride inside on you
+            or a pet and make themselves at home. That’s why veterinarians often
+            recommend year-round parasite protection for pets, such as Simparica
+            Trio for dogs or Revolution Plus for cats.
+          </p>
+        </div>
+      </div>
+
+      <div class="sub-articles">
+        <div class="sub-article" onclick="navigateTo('/article1')">
+          <img src="/images/article11.jpg" alt="Article image" />
+          <div class="sub-article-title">
+            <h3>Can Dogs Get Seasonal Depression?</h3>
+          </div>
+        </div>
+        <div class="sub-article" onclick="navigateTo('/article2')">
+          <img src="/images/article7.jpg" alt="Article image" />
+          <div class="sub-article-title">
+            <h3>Adopting a Cat? 12 Cat Adoption Mistakes to Avoid</h3>
+          </div>
+        </div>
+        <div class="sub-article" onclick="navigateTo('/article3')">
+          <img src="/images/article3.jpg" alt="Article image" />
+          <div class="sub-article-title">
+            <h3>5 Tips for Keeping Your Dog Healthy</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's New Section -->
+    <div class="whats-new-section">
+      <h1>What's New</h1>
+      <div class="whats-new-container">
+        <div class="whats-new-article" onclick="navigateTo('/article5')">
+          <img src="/images/article5.jpg" alt="Article image" />
+          <div class="whats-new-content">
+            <h2>New Tips for Caring for Older Pets</h2>
+            <p>
+              Home modifications and other tips for helping your best friend
+              through their golden years
+            </p>
+            <p>
+              It happens so fast: One day we’re adopting a young, energetic dog
+              or cat, and then we blink and the veterinarian is telling us we’ve
+              got a senior pet on our hands. If your companion animal is slowing
+              down, don’t worry: Caring for an elderly dog or cat just requires
+              a little more thoughtfulness. Specifically, you’re looking for
+              ways to make your senior pet’s life safer, easier and more
+              comfortable.
+            </p>
+          </div>
+        </div>
+
+        <div class="whats-new-article" onclick="navigateTo('/article6')">
+          <img src="/images/article6.jpg" alt="Article image" />
+          <div class="whats-new-content">
+            <h2>5 Must-Know Tips for Pet Safety During Winter</h2>
+            <p>
+              As the temperature drops, it's important to take extra precautions
+              to ensure your pet’s safety. From frostbite prevention to keeping
+              your pet warm indoors, these tips will help you keep your furry
+              friend happy and healthy throughout the colder months.
+            </p>
+            <p>
+              The colder months can have many of us snuggling up in warm comfy
+              blankets and wearing our favourite pair of slippers but for our
+              pets, it’s important to remember that like us, they too feel the
+              effects of winter. Just like we take extra steps to keep ourselves
+              comfortable, it’s important that we do that same for our furry
+              family members. Here are some great tips to help care for your pet
+              in winter.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Back button to go to the previous page -->
+    <button class="back-button" id="backButton">Back</button>
+  </body>
+</html>

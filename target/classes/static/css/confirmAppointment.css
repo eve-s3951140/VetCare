@@ -1,0 +1,75 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+}
+
+.header {
+    background-color: #007bff;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header img {
+    width: 50px;
+    height: auto;
+    margin-left: 20px;
+}
+
+.profile-link {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.profile-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: white;
+    padding: 5px;
+    border: 2px solid #007bff;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+.appointment-summary {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    display: inline-block;
+    margin-bottom: 20px;
+    background-color: white;
+    width: 50%;
+    text-align: left;
+}
+
+.appointment-summary p {
+    font-size: 16px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    margin: 0 auto;
+}
+
+.back-button, .confirm-button {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.back-button:hover, .confirm-button:hover {
+    background-color: #0056b3;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register Account</title>
+    <link rel="stylesheet" href="/css/register.css" />
+  </head>
+  <body>
+    <div class="header">
+      <a href="/login">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+    </div>
+
+    <div class="registration-form">
+      <h1>Register Account</h1>
+      <div class="options">
+        <a href="veterinarianRegister" class="option">
+          <img src="/images/veterinarian.png" alt="Veterinarian Icon" />
+          <h2>Veterinarian</h2>
+        </a>
+        <a href="petOwnerRegister" class="option">
+          <img src="/images/pet-owner.png" alt="Pet Owner Icon" />
+          <h2>Pet Owner</h2>
+        </a>
+      </div>
+      <!-- Back Button that leads to login -->
+      <a href="/login" style="text-decoration: none">
+        <div class="back-button">Back</div>
+      </a>
+    </div>
+  </body>
+</html>

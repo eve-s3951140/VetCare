@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Profile Details</title>
+    <link rel="stylesheet" href="/css/vetProfile.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const userID = localStorage.getItem("userId");
+        const vetID = localStorage.getItem("vetId");
+
+        // If both vetId and userId are available, update the dynamic URLs
+        if (vetID && userID) {
+          const vetDashboardLink = document.querySelector(
+            "#vet-dashboard-link"
+          );
+          const logoLink = document.querySelector("#logo-link");
+          const profileLink = document.querySelector("#profile-link");
+          const patientsLink = document.querySelector("#patients-link");
+          const availabilityLink = document.querySelector("#availability-link");
+
+          if (vetDashboardLink) {
+            vetDashboardLink.href = `/vetDashboard?userId=${userID}&vetId=${vetID}`;
+          }
+          if (logoLink) {
+            logoLink.href = `/vetDashboard?userId=${userID}&vetId=${vetID}`;
+          }
+          if (profileLink) {
+            profileLink.href = `/vetProfile?vetId=${vetID}`;
+          }
+          if (patientsLink) {
+            patientsLink.href = `/patients?vetId=${vetID}`;
+          }
+          if (availabilityLink) {
+            availabilityLink.href = `/availability?vetId=${vetID}`;
+          }
+        } else {
+          console.log("vetId or userId is missing from localStorage.");
+        }
+
+        const now = new Date();
+        const startOfWeek = new Date(
+          now.setDate(now.getDate() - now.getDay() + 1)
+        ); // Monday
+        const weekStart = startOfWeek.toISOString().split("T")[0];
+
+        const scheduleLink = document.querySelector("#schedule-link");
+        // Update the href attribute of the schedule link
+        if (scheduleLink) {
+          scheduleLink.href = `/schedule?vetId=${vetID}&weekStart=${weekStart}`;
+        }
+      });
+
+      function cancelEdit() {
+        document.getElementById("editMode").style.display = "none";
+        document.getElementById("viewMode").style.display = "block";
+      }
+
+      function editProfile() {
+        document.getElementById("editMode").style.display = "block";
+        document.getElementById("viewMode").style.display = "none";
+      }
+
+      function logout() {
+        // Redirect to the login page without affecting local storage
+        window.location.href = "/login";
+      }
+
+      window.onload = loadProfile;
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="#" id="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="#" id="profile-link" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="nav-bar">
+      <a href="#" id="vet-dashboard-link">Home</a>
+      <a href="patients" id="patients-link">Patients</a>
+      <a href="#" id="schedule-link">Schedule</a>
+      <a href="#" id="availability-link">Availability</a>
+      <a href="/faqPage">FAQ</a>
+    </div>
+
+    <div class="profile-container">
+      <h1>Profile Details</h1>
+      <div class="profile-card">
+        <div id="viewMode">
+          <div class="profile-info">
+            <p><strong>Title:</strong> <span th:text="${vet.title}"></span></p>
+            <p>
+              <strong>First Name:</strong>
+              <span th:text="${user.firstName}"></span>
+            </p>
+            <p>
+              <strong>Last Name:</strong>
+              <span th:text="${user.lastName}"></span>
+            </p>
+            <p>
+              <strong>Date of Birth:</strong>
+              <span th:text="${user.birthDate}"></span>
+            </p>
+            <p>
+              <strong>Gender:</strong> <span th:text="${user.gender}"></span>
+            </p>
+            <p>
+              <strong>Phone Number:</strong>
+              <span th:text="${user.phoneNumber}"></span>
+            </p>
+            <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+            <p>
+              <strong>Languages Spoken:</strong>
+              <span th:text="${vet.languagesSpoken}"></span>
+            </p>
+
+            <h3>Current Residential Address</h3>
+            <p>
+              <strong>Street Address:</strong>
+              <span th:text="${address.street}"></span>
+            </p>
+            <p>
+              <strong>Suburb:</strong> <span th:text="${address.suburb}"></span>
+            </p>
+            <p>
+              <strong>State:</strong> <span th:text="${address.state}"></span>
+            </p>
+            <p>
+              <strong>Postcode:</strong>
+              <span th:text="${address.postcode}"></span>
+            </p>
+
+            <h3>Qualifications</h3>
+            <ol>
+              <li th:each="qualification : ${qualifications}">
+                <p>
+                  <strong>Qualification:</strong>
+                  <span th:text="${qualification.name}"></span>
+                </p>
+                <p>
+                  <strong>University/College:</strong>
+                  <span th:text="${qualification.university}"></span>
+                </p>
+                <p>
+                  <strong>Country:</strong>
+                  <span th:text="${qualification.country}"></span>
+                </p>
+                <p>
+                  <strong>Year Awarded:</strong>
+                  <span th:text="${qualification.year}"></span>
+                </p>
+              </li>
+            </ol>
+
+            <div class="profile-actions">
+              <button type="button" class="edit-button" onclick="editProfile()">
+                Edit Profile
+              </button>
+              <button type="button" class="logout-button" onclick="logout()">
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="editMode" style="display: none">
+          <form
+            id="profileForm"
+            enctype="multipart/form-data"
+            th:action="@{/vetProfile}"
+            method="post"
+          >
+            <div class="profile-info">
+              <p>
+                <strong>Title:</strong>
+                <select id="edit-title" name="title">
+                  <option value="Dr." th:selected="${vet.title == 'Dr.'}">
+                    Dr.
+                  </option>
+                  <option value="Mr." th:selected="${vet.title == 'Mr.'}">
+                    Mr.
+                  </option>
+                  <option value="Ms." th:selected="${vet.title == 'Ms.'}">
+                    Ms.
+                  </option>
+                  <option value="Mrs." th:selected="${vet.title == 'Mrs.'}">
+                    Mrs.
+                  </option>
+                </select>
+              </p>
+              <p>
+                <strong>First Name:</strong>
+                <input
+                  type="text"
+                  id="edit-firstname"
+                  name="firstname"
+                  th:value="${user.firstName}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>Last Name:</strong>
+                <input
+                  type="text"
+                  id="edit-lastname"
+                  name="lastname"
+                  th:value="${user.lastName}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>Date of Birth:</strong>
+                <input
+                  type="date"
+                  id="edit-dob"
+                  name="dob"
+                  th:value="${user.birthDate}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>Gender:</strong>
+                <select id="edit-gender" name="gender">
+                  <option value="male" th:selected="${user.gender == 'male'}">
+                    Male
+                  </option>
+                  <option
+                    value="female"
+                    th:selected="${user.gender == 'female'}"
+                  >
+                    Female
+                  </option>
+                  <option value="other" th:selected="${user.gender == 'other'}">
+                    Other
+                  </option>
+                </select>
+              </p>
+              <p>
+                <strong>Phone Number:</strong>
+                <input
+                  type="tel"
+                  id="edit-phone"
+                  name="phone"
+                  th:value="${user.phoneNumber}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>Email:</strong>
+                <input
+                  type="email"
+                  id="edit-email"
+                  name="email"
+                  th:value="${user.email}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>Languages Spoken:</strong>
+                <input
+                  type="text"
+                  id="edit-languages"
+                  name="language"
+                  th:value="${vet.languagesSpoken}"
+                  required
+                />
+              </p>
+
+              <h3>Current Residential Address:</h3>
+              <p>
+                <strong>Street Address:</strong>
+                <input
+                  type="text"
+                  id="edit-streetAddress"
+                  name="streetAddress"
+                  th:value="${address.street}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>Suburb:</strong>
+                <input
+                  type="text"
+                  id="edit-suburb"
+                  name="suburb"
+                  th:value="${address.suburb}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>State:</strong>
+                <input
+                  type="text"
+                  id="edit-state"
+                  name="state"
+                  th:value="${address.state}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>Postcode:</strong>
+                <input
+                  type="text"
+                  id="edit-postcode"
+                  name="postcode"
+                  th:value="${address.postcode}"
+                  required
+                />
+              </p>
+
+              <h3>Qualification</h3>
+              <p>
+                <strong>Qualification:</strong>
+                <input
+                  type="text"
+                  id="edit-qualification"
+                  name="qualification"
+                  th:value="${qualifications[0].name}"
+                />
+              </p>
+              <p>
+                <strong>University/College:</strong>
+                <input
+                  type="text"
+                  id="edit-university"
+                  name="university"
+                  th:value="${qualifications[0].university}"
+                  required
+                />
+              </p>
+              <p>
+                <strong>Year Awarded:</strong>
+                <input
+                  type="text"
+                  id="edit-yearAwarded"
+                  name="yearAwarded"
+                  th:value="${qualifications[0].year}"
+                  required
+                />
+              </p>
+
+              <div class="profile-actions">
+                <button
+                  type="button"
+                  class="cancel-button"
+                  onclick="cancelEdit()"
+                >
+                  Cancel
+                </button>
+                <button type="submit" class="save-button">Save Changes</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

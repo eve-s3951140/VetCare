@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Appointment Scheduling</title>
+    <link rel="stylesheet" href="/css/petAppointment.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const petCards = document.querySelectorAll(".pet-card");
+        const userId = localStorage.getItem("userId");
+        const petOwnerId = localStorage.getItem("petOwnerId");
+
+        // Set the links for the logo and profile icon
+        document.querySelector(
+          ".logo-link"
+        ).href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+        document.querySelector(
+          ".profile-link"
+        ).href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+
+        // Add click event listener for pet card selection
+        petCards.forEach((card) => {
+          card.addEventListener("click", function () {
+            // Remove 'selected' class from all pet cards
+            petCards.forEach((c) => c.classList.remove("selected"));
+
+            // Add 'selected' class to the clicked pet card
+            card.classList.add("selected");
+          });
+        });
+
+        // Continue button click event
+        document
+          .querySelector(".continue-button")
+          .addEventListener("click", function () {
+            const selectedCard = document.querySelector(".pet-card.selected");
+            if (selectedCard) {
+              const selectedPetId = selectedCard.getAttribute("data-pet-id");
+              const petName =
+                selectedCard.querySelector(".pet-info h2").textContent;
+              localStorage.setItem("selectedPetId", selectedPetId);
+              // Redirect to appointment type page with selected pet ID
+              // window.location.href = `/appointment/new/select_appointment_type?petId=${selectedPetId}&petName=${encodeURIComponent(petName)}`;
+              window.location.href = `/appointment/new/select_appointment_type`;
+            } else {
+              alert("Please select a pet to continue.");
+            }
+          });
+
+        document
+          .querySelector(".back-button")
+          .addEventListener("click", function () {
+            // clear local storage relevant data
+            if (localStorage.getItem("selectedPetId")) {
+              localStorage.removeItem("selectedPetId");
+            }
+            if (localStorage.getItem("selectedAppointmentTypeId")) {
+              localStorage.removeItem("selectedAppointmentTypeId");
+            }
+            if (localStorage.getItem("selectedAppointmentTypeDuration")) {
+              localStorage.removeItem("selectedAppointmentTypeDuration");
+            }
+            if (localStorage.getItem("selectedClinicId")) {
+              localStorage.removeItem("selectedClinicId");
+            }
+            if (localStorage.getItem("selectedVetId")) {
+              localStorage.removeItem("selectedVetId");
+            }
+            if (localStorage.getItem("selectedAppointmentDate")) {
+              localStorage.removeItem("selectedAppointmentDate");
+            }
+            if (localStorage.getItem("selectedAppointmentTime")) {
+              localStorage.removeItem("selectedAppointmentTime");
+            }
+            // Redirect to the select pet page
+            window.location.href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="login" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>New Appointment Scheduling</h1>
+      <!-- Check if there are pets -->
+      <th:block th:if="${#lists.isEmpty(pets)}">
+        <h3>
+          You have no pet. Please register pet through this
+          <a>
+            <a href="/petRegister">link</a>
+          </a>
+        </h3>
+      </th:block>
+
+      <!-- If pets exist, show the pet selection -->
+      <th:block th:unless="${#lists.isEmpty(pets)}">
+        <h3>Select Your Pet:</h3>
+        <div class="pet-selection">
+          <div
+            th:each="pet : ${pets}"
+            class="pet-card"
+            th:data-pet-id="${pet.id}"
+          >
+            <img
+              th:src="${pet.species == 'Dog' || pet.species == 'dog' ? '/images/dog.png' :
+                            pet.species == 'Cat' || pet.species == 'cat' ? '/images/cat.png' :
+                            pet.species == 'Bird' || pet.species == 'bird' ? '/images/bird.png' :
+                            pet.species == 'Rabbit' || pet.species == 'rabbit' ? '/images/bunny.png' :
+                            pet.species == 'Hamster' || pet.species == 'hamster'? '/images/rodent.png' :
+                            pet.species == 'Fish' || pet.species == 'fish' ? '/images/fish.png' :
+                            pet.species == 'Horse' || pet.species == 'horse' ? '/images/horse.png' :
+                            pet.species == 'Turtle' || pet.species == 'turtle' ? '/images/turtle.png' :
+                            pet.species == 'Chicken' || pet.species == 'chicken' ? '/images/chicken.png' :
+                            '/images/pet-placeholder.png'}"
+              alt="Pet Image"
+              class="pet-image"
+            />
+            <!-- <img alt="Pet Image" class="pet-image" /> -->
+
+            <div class="pet-info">
+              <h2 th:text="${pet.name}">Pet Name</h2>
+            </div>
+          </div>
+        </div>
+      </th:block>
+    </div>
+
+    <div class="buttons">
+      <button type="button" class="back-button">Back</button>
+      <button type="button" class="continue-button">Continue</button>
+    </div>
+  </body>
+</html>

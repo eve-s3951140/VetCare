@@ -1,0 +1,123 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #f5f5f5;
+}
+
+.header {
+  width: 100%;
+  background-color: #007bff;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header img.logo {
+  width: 50px;
+  height: auto;
+  margin-left: 15px;
+}
+
+.profile-link {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: white; /* White background to match the icon style */
+  padding: 5px;
+}
+
+.nav-bar {
+  background-color: #d3edf8;
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-bar a {
+  margin: 0 20px;
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-bar a:hover,
+.nav-bar a.active {
+  background-color: #007bff;
+  color: white;
+}
+
+h1 {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 20px;
+  color: black;
+}
+
+.container {
+  padding: 2rem 10rem;
+  text-align: center;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: whitesmoke;
+  border: black 1px solid;
+  border-radius: 20px;
+}
+
+.appointment-card {
+  border-radius: 10px;
+  border: black 1px solid;
+  min-width: min-content;
+  margin: 20px;
+}
+.arrow-buttons-container {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+}
+
+.arrow-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.arrow-button {
+  background-color: transparent;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.arrow-button img {
+  width: 20px;
+  height: 20px;
+}
+
+.arrow-button img:hover {
+  filter: invert(0.5);
+}

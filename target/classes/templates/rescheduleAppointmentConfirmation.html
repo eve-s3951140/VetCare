@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Confirm Appointment</title>
+    <link rel="stylesheet" href="/css/confirmAppointment.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the userId and petOwnerId from local storage
+        const userId = localStorage.getItem("userId");
+        const petOwnerId = localStorage.getItem("petOwnerId");
+
+        // Set the links for the logo and profile icon
+        document.getElementById("logo-link").href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+        document.getElementById("profile-link").href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+
+        // Add click event listener for back button
+        document
+          .querySelector(".back-button")
+          .addEventListener("click", function () {
+            const appointmentId = localStorage.getItem("appointmentId");
+            const selectedVetId = localStorage.getItem("selectedVetId");
+            const selectedAppointmentTypeDuration = localStorage.getItem(
+              "selectedAppointmentTypeDuration"
+            );
+
+            window.location.href = `/appointment/reschedule/select_date_time?appointmentId=${appointmentId}&vetId=${selectedVetId}&appointmentTypeDuration=${selectedAppointmentTypeDuration}`;
+          });
+      });
+
+      function confirmAppointment() {
+        // retireve data from local storage for the form
+        document.getElementById("userId").value =
+          localStorage.getItem("userId");
+        document.getElementById("petOwnerId").value =
+          localStorage.getItem("petOwnerId");
+
+        // clear local storage relevant data
+        if (localStorage.getItem("appointmentId")) {
+          localStorage.removeItem("appointmentId");
+        }
+        if (localStorage.getItem("selectedVetId")) {
+          localStorage.removeItem("selectedVetId");
+        }
+        if (localStorage.getItem("selectedAppointmentTypeDuration")) {
+          localStorage.removeItem("selectedAppointmentTypeDuration");
+        }
+        if (localStorage.getItem("selectedAppointmentDate")) {
+          localStorage.removeItem("selectedAppointmentDate");
+        }
+        if (localStorage.getItem("selectedAppointmentTime")) {
+          localStorage.removeItem("selectedAppointmentTime");
+        }
+
+        alert("Your rescheduled appointment is now confirmed. Thank you.");
+
+        // Submit the form
+        document.getElementById("confirmAppointmentForm").submit();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="login" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>Reschedule Appointment</h1>
+      <h3>Confirm your Appointment:</h3>
+
+      <div class="appointment-summary">
+        <p><strong>Clinic:</strong> <span th:text="${clinicName}"></span></p>
+        <p>
+          <strong>Appointment Type:</strong>
+          <span th:text="${appointmentTypeName}"></span>
+        </p>
+        <p>
+          <strong>Price:</strong>
+          <span
+            th:text="'$ ' + ${#numbers.formatDecimal(price, 1, 'POINT', 2, 'POINT')}"
+          ></span>
+        </p>
+        <p><strong>Pet:</strong> <span th:text="${petInfo}"></span></p>
+        <p>
+          <strong>New Date:</strong> <span th:text="${appointmentDate}"></span>
+        </p>
+        <p>
+          <strong>New Time:</strong> <span th:text="${appointmentTime}"></span>
+        </p>
+        <p>
+          <strong>Veterinarian:</strong> <span th:text="${vetTitleName}"></span>
+        </p>
+      </div>
+
+      <div class="buttons">
+        <button type="button" class="back-button">Back</button>
+        <form
+          id="confirmAppointmentForm"
+          enctype="multipart/form-data"
+          th:action="@{/appointment/reschedule/confirmation}"
+          method="POST"
+        >
+          <input
+            type="hidden"
+            name="appointmentId"
+            id="appointmentId"
+            th:value="${appointmentId}"
+          />
+          <input
+            type="hidden"
+            name="selectedAppointmentDate"
+            id="selectedAppointmentDate"
+            th:value="${selectedAppointmentDate}"
+          />
+          <input
+            type="hidden"
+            name="selectedAppointmentTime"
+            id="selectedAppointmentTime"
+            th:value="${selectedAppointmentTime}"
+          />
+          <input
+            type="hidden"
+            name="selectedAppointmentTypeDuration"
+            id="selectedAppointmentTypeDuration"
+            th:value="${selectedAppointmentTypeDuration}"
+          />
+          <input type="hidden" name="userId" id="userId" />
+          <input type="hidden" name="petOwnerId" id="petOwnerId" />
+          <button
+            type="button"
+            class="confirm-button"
+            onclick="confirmAppointment();"
+          >
+            Confirm
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

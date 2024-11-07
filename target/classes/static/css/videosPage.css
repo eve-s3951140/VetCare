@@ -1,0 +1,187 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.header {
+  width: 100%;
+  background-color: #007bff;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header img.logo {
+  width: 50px;
+  height: auto;
+  margin-left: 15px;
+}
+
+.profile-link {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: white;
+  padding: 5px;
+}
+
+/* Navbar styling */
+.navbar {
+  background-color: #d3edf8;
+  display: flex;
+  justify-content: center;
+  padding: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar ul {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  margin: 0 20px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar a:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Video Section */
+.videos-section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.videos-section h1 {
+  font-size: 36px;
+  margin-bottom: 30px;
+}
+
+/* Video List */
+.video-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 20px;
+  max-width: 800px;
+  margin: 0 auto; /* Center the video cards */
+}
+
+.video-card {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.video-card:hover {
+  background-color: #f0f0f0;
+}
+
+.video-card img {
+  width: 200px;
+  height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.video-info h2 {
+  margin: 0;
+  font-size: 22px;
+  color: #333;
+}
+
+.video-info p {
+  margin-top: 10px;
+  color: #666;
+  font-size: 16px;
+}
+
+/* Modal (background for video) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 800px;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#videoContainer iframe {
+  width: 100%;
+  height: 450px;
+  border-radius: 8px;
+}
+
+.back-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  opacity: 0.8;
+}

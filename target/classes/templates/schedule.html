@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vet Dashboard</title>
+    <link rel="stylesheet" href="/css/schedule.css" />
+  </head>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Set schedule link in navbar to be default starting current week
+      // Week start is set to the current date but is not stored in local storage
+      const scheduleLink = document.getElementById("schedule-link");
+      if (scheduleLink) {
+        const vetId = localStorage.getItem("vetId");
+        if (vetId) {
+          const currentDate = new Date();
+          const weekStart = new Date(
+            currentDate.setDate(
+              currentDate.getDate() - currentDate.getDay() + 1
+            )
+          ); // Monday
+          const formattedWeekStart = weekStart.toISOString().split("T")[0];
+          scheduleLink.href = `/schedule?vetId=${vetId}&weekStart=${formattedWeekStart}`;
+        }
+      }
+    });
+
+    // Function to navigate to the previous or next week
+    function navigateToWeek(days) {
+      // Get the current weekStart value from the hidden input field
+      const weekStartInput = document.getElementById("weekStart").value;
+      const currentWeekStart = new Date(weekStartInput);
+
+      // Calculate the new weekStart value by adding/subtracting days
+      currentWeekStart.setDate(currentWeekStart.getDate() + days);
+
+      // Format the new weekStart as yyyy-MM-dd
+      const newWeekStart = currentWeekStart.toISOString().split("T")[0];
+
+      // Retrieve vetId
+      const vetId = localStorage.getItem("vetId");
+
+      // Redirect to the updated URL with the new weekStart
+      window.location.href = `/schedule?vetId=${vetId}&weekStart=${newWeekStart}`;
+    }
+  </script>
+  <body>
+    <div class="header">
+      <a
+        th:href="@{/vetDashboard(userId=${userId}, vetId=${vetId})}"
+        id="logo-link"
+      >
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a
+        th:href="@{/vetProfile(vetId=${vetId})}"
+        id="profile-link"
+        class="profile-link"
+      >
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="nav-bar">
+      <a
+        th:href="@{/vetDashboard(userId=${userId}, vetId=${vetId})}"
+        id="vet-dashboard-link"
+        >Home</a
+      >
+      <a th:href="@{/patients(vetId=${vetId})}" id="patients-link">Patients</a>
+      <a
+        th:href="@{/schedule(vetId=${vetId}, weekStart=${weekStart})}"
+        id="schedule-link"
+        class="active"
+        >Schedule</a
+      >
+      <a th:href="@{/availability(vetId=${vetId})}"
+         class="availability-link"
+      >Availability</a>
+      <a th:href="@{/faqPage}" id="faq-link">FAQ</a>
+    </div>
+
+    <!-- Weekly Calendar View -->
+    <div class="container">
+      <h1 style="text-align: left">Your Weekly Schedule</h1>
+
+      <!-- Arrow buttons and heading in a flex container -->
+      <div class="arrow-buttons-container">
+        <h2>
+          Appointments for:
+          <span
+            id="appointments-range"
+            th:text="${weekStart} + ' - ' + ${weekEnd}"
+            >Start - End</span
+          >
+        </h2>
+        <div class="arrow-buttons">
+          <!-- Navigate to previous week -->
+          <button class="arrow-button" onclick="navigateToWeek(-7)">
+            <img src="/images/left-arrow-icon.png" alt="Left Arrow" />
+          </button>
+
+          <!-- Navigate to next week -->
+          <button class="arrow-button" onclick="navigateToWeek(7)">
+            <img src="/images/right-arrow-icon.png" alt="Right Arrow" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Hidden input to store the current weekStart date -->
+      <input type="hidden" id="weekStart" th:value="${weekStart}" />
+
+      <!-- Container for the calendar -->
+      <div class="calendar">
+        <!-- Monday -->
+        <div class="day">
+          <h3>Mon</h3>
+          <div
+            th:each="appointment : ${appointments}"
+            th:if="${#strings.equals(appointment.dayOfWeek, 'Mon')}"
+            class="appointment-card"
+          >
+            <h4>Appointment</h4>
+            <p>
+              <span th:text="${appointment.startTime}">Time</span>
+              -
+              <span th:text="${appointment.endTime}">Time</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Tuesday -->
+        <div class="day">
+          <h3>Tue</h3>
+          <div
+            th:each="appointment : ${appointments}"
+            th:if="${#strings.equals(appointment.dayOfWeek, 'Tue')}"
+            class="appointment-card"
+          >
+            <h4>Appointment</h4>
+            <p>
+              <span th:text="${appointment.startTime}">Time</span>
+              -
+              <span th:text="${appointment.endTime}">Time</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Wednesday -->
+        <div class="day">
+          <h3>Wed</h3>
+          <div
+            th:each="appointment : ${appointments}"
+            th:if="${#strings.equals(appointment.dayOfWeek, 'Wed')}"
+            class="appointment-card"
+          >
+            <h4>Appointment</h4>
+            <p>
+              <span th:text="${appointment.startTime}">Time</span>
+              -
+              <span th:text="${appointment.endTime}">Time</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Thursday -->
+        <div class="day">
+          <h3>Thu</h3>
+          <div
+            th:each="appointment : ${appointments}"
+            th:if="${#strings.equals(appointment.dayOfWeek, 'Thu')}"
+            class="appointment-card"
+          >
+            <h4>Appointment</h4>
+            <p>
+              <span th:text="${appointment.startTime}">Time</span>
+              -
+              <span th:text="${appointment.endTime}">Time</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Friday -->
+        <div class="day">
+          <h3>Fri</h3>
+          <div
+            th:each="appointment : ${appointments}"
+            th:if="${#strings.equals(appointment.dayOfWeek, 'Fri')}"
+            class="appointment-card"
+          >
+            <h4>Appointment</h4>
+            <p>
+              <span th:text="${appointment.startTime}">Time</span>
+              -
+              <span th:text="${appointment.endTime}">Time</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Saturday -->
+        <div class="day">
+          <h3>Sat</h3>
+          <div
+            th:each="appointment : ${appointments}"
+            th:if="${#strings.equals(appointment.dayOfWeek, 'Sat')}"
+            class="appointment-card"
+          >
+            <h4>Appointment</h4>
+            <p>
+              <span th:text="${appointment.startTime}">Time</span>
+              -
+              <span th:text="${appointment.endTime}">Time</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Sunday -->
+        <div class="day">
+          <h3>Sun</h3>
+          <div
+            th:each="appointment : ${appointments}"
+            th:if="${#strings.equals(appointment.dayOfWeek, 'Sun')}"
+            class="appointment-card"
+          >
+            <h4>Appointment</h4>
+            <p>
+              <span th:text="${appointment.startTime}">Time</span>
+              -
+              <span th:text="${appointment.endTime}">Time</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

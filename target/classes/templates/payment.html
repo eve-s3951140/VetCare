@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Purchase Medicine - Payment</title>
+    <link rel="stylesheet" href="/css/payment.css" />
+  </head>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the userId and petOwnerId from local storage
+      const userId = localStorage.getItem("userId");
+      const petOwnerId = localStorage.getItem("petOwnerId");
+
+      // Set the link for the logo and profile icon
+      document.querySelector(
+        "#logo-link"
+      ).href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+      document.querySelector(
+        "#profile-link"
+      ).href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+    });
+  </script>
+  <body>
+    <!-- Header Section -->
+    <div class="header">
+      <a href="/" id="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="#" class="profile-link" id="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="container">
+      <h1>Purchase medicine</h1>
+
+      <div class="tabs">
+        <div class="tab">1. Shipment Details</div>
+        <div class="tab active">2. Payment Details</div>
+        <div class="tab">3. Review and checkout</div>
+      </div>
+
+      <div class="content">
+        <!-- Payment Form Section -->
+        <div class="payment-info">
+          <h2>Payment information</h2>
+          <form>
+            <div class="form-group">
+              <label for="cardNumber">Card number</label>
+              <input
+                type="text"
+                id="cardNumber"
+                placeholder="Card number"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="expirationDate">Expiration date</label>
+              <input
+                type="text"
+                id="expirationDate"
+                placeholder="MM/YY"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="cvc">CVC</label>
+              <input type="text" id="cvc" placeholder="CVC" required />
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="actions">
+        <!-- Back button with form submission -->
+        <form action="/refillPrescription" method="get">
+          <input
+            type="hidden"
+            name="prescriptionId"
+            th:value="${prescriptionId}"
+          />
+          <button class="back-btn" type="submit">Back</button>
+        </form>
+
+        <!-- Proceed to checkout button with form submission -->
+        <form action="/checkout" method="get">
+          <input
+            type="hidden"
+            name="prescriptionId"
+            th:value="${prescriptionId}"
+          />
+          <button class="proceed-btn" type="submit">Proceed to checkout</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

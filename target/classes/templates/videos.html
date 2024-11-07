@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pet Care Videos</title>
+    <link rel="stylesheet" href="/css/videosPage.css" />
+  </head>
+  <script>
+    // Function to handle video popup
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the userId and petOwnerId from local storage
+      const userId = localStorage.getItem("userId");
+      const petOwnerId = localStorage.getItem("petOwnerId");
+
+      const backButton = document.getElementById("backButton");
+
+      backButton.addEventListener("click", function () {
+        window.history.back();
+      });
+
+      const profileLink = document.getElementById("profileLink");
+      const logoLink = document.getElementById("logoLink");
+
+      if (profileLink) {
+        profileLink.addEventListener("click", function () {
+          window.location.href = "/petOwnerProfile?petOwnerId=" + petOwnerId;
+        });
+      }
+
+      if (logoLink) {
+        logoLink.addEventListener("click", function () {
+          window.location.href =
+            "/petOwnerWelcome?userId=" + userId + "&petOwnerId=" + petOwnerId;
+        });
+      }
+
+      var modal = document.getElementById("videoModal");
+      var videoContainer = document.getElementById("videoContainer");
+      var span = document.getElementsByClassName("close")[0];
+      var videoCards = document.getElementsByClassName("video-card");
+
+      for (var i = 0; i < videoCards.length; i++) {
+        videoCards[i].addEventListener("click", function () {
+          var videoId = this.getAttribute("data-video-id");
+          videoContainer.innerHTML =
+            '<iframe src="https://www.youtube.com/embed/' +
+            videoId +
+            '?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+          modal.style.display = "block";
+        });
+      }
+
+      span.onclick = function () {
+        modal.style.display = "none";
+        videoContainer.innerHTML = "";
+      };
+
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+          videoContainer.innerHTML = "";
+        }
+      };
+    });
+  </script>
+  <body>
+    <div class="header">
+      <a id="logoLink">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a class="profile-link" id="profileLink">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="videos-section">
+      <h1>Pet Care Videos</h1>
+
+      <div class="video-list">
+        <!-- Video Cards -->
+        <div class="video-card" data-video-id="n3OwgFrZ4zY">
+          <img
+            src="/images/vidThumbnail1.jpg"
+            alt="Video 1"
+            class="video-thumbnail"
+          />
+          <div class="video-info">
+            <h2>Beginner's Guide to Care for a Pet Rabbit!</h2>
+            <p>
+              Looking for a furry friend that's both cute and cuddly? Look no
+              further than a pet rabbit! In this complete rabbit care guide,
+              we'll cover everything you need to know about caring for pet
+              rabbits, including their behavior, personality, diet, and
+              lifespan.
+            </p>
+          </div>
+        </div>
+
+        <div class="video-card" data-video-id="zlljYjfejIg">
+          <img
+            src="/images/vidThumbnail2.jpg"
+            alt="Video 2"
+            class="video-thumbnail"
+          />
+          <div class="video-info">
+            <h2>Chinchilla as Pet - Pros and Cons Chinchillas as Pet</h2>
+            <p>
+              Are you thinking about getting a chinchilla as a pet? Look no
+              further! In this video, we'll be sharing all the ins and outs of
+              caring for chinchillas.
+            </p>
+          </div>
+        </div>
+
+        <div class="video-card" data-video-id="UqswCFhhPPg">
+          <img
+            src="/images/vidThumbnail3.jpg"
+            alt="Video 3"
+            class="video-thumbnail"
+          />
+          <div class="video-info">
+            <h2>
+              Love Birds as Pets: The Pros and Cons of Keeping Love Birds as Pet
+            </h2>
+            <p>
+              Are you considering love birds as pets? In this video, we'll
+              discuss the pros and cons of owning love birds, from their playful
+              personalities and affectionate nature to the challenges of
+              providing adequate space and attention.
+            </p>
+          </div>
+        </div>
+
+        <!-- Additional Video Cards -->
+        <div class="video-card" data-video-id="yK0goXSzYXQ">
+          <img
+            src="/images/vidThumbnail4.jpg"
+            alt="Video 4"
+            class="video-thumbnail"
+          />
+          <div class="video-info">
+            <h2>Chameleon as Pet - Chameleon Beginners Guide!</h2>
+            <p>
+              Are you thinking about getting Chameleons as pet? This beginner
+              guide will give you all the info about their needs, how to care
+              for a Chameleon and if they can be good pets.
+            </p>
+          </div>
+        </div>
+
+        <div class="video-card" data-video-id="EeGCSC4jyqg">
+          <img
+            src="/images/article8.jpg"
+            alt="Video 5"
+            class="video-thumbnail"
+          />
+          <div class="video-info">
+            <h2>15 Life Hacks for Dog Owners! Pet Care Tips + Tricks</h2>
+            <p>
+              Need some help taking care of your pup? Today I’m sharing 15
+              awesome life hacks for dog owners that will make your life (and
+              your dog’s) much, much easier! From cleaning fur off furniture to
+              extending the life of your dog shampoo, these tip & tricks will be
+              sure to come in handy next time you think: “There has to be an
+              easier way to do this…”
+            </p>
+          </div>
+        </div>
+
+        <div class="video-card" data-video-id="lArwj8ELa10">
+          <img
+            src="/images/article9.jpg"
+            alt="Video 6"
+            class="video-thumbnail"
+          />
+          <div class="video-info">
+            <h2>20 Common Mistakes Cat Owners Make</h2>
+            <p>
+              In this video, we'll talk about 20 common mistakes cat owners
+              make.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Back button to go to the previous page -->
+    <button class="back-button" id="backButton">Back</button>
+
+    <!-- Modal for YouTube Video -->
+    <div id="videoModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="videoContainer"></div>
+      </div>
+    </div>
+  </body>
+</html>

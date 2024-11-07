@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Appointment Scheduling</title>
+    <link rel="stylesheet" href="/css/vetList.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const vetCards = document.querySelectorAll(".vet-card");
+        const urlParams = new URLSearchParams(window.location.search);
+        const appointmentTypeId = urlParams.get("appointmentTypeId");
+
+        // Get the userId and petOwnerId from local storage
+        const userId = localStorage.getItem("userId");
+        const petOwnerId = localStorage.getItem("petOwnerId");
+
+        // Set the links for the logo and profile icon
+        document.querySelector(
+          ".logo-link"
+        ).href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+        document.querySelector(
+          ".profile-link"
+        ).href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+
+        // Make the entire card clickable
+        vetCards.forEach((card) => {
+          card.addEventListener("click", function () {
+            // Remove the 'selected' class from all cards
+            vetCards.forEach((c) => c.classList.remove("selected"));
+
+            // Add 'selected' class to the clicked card
+            card.classList.add("selected");
+          });
+        });
+
+        // Continue button logic
+        document
+          .querySelector(".continue-button")
+          .addEventListener("click", function () {
+            const selectedCard = document.querySelector(".vet-card.selected");
+            if (selectedCard) {
+              const selectedVetId = selectedCard.getAttribute("data-vet-id");
+              const selectedClinicId = localStorage.getItem("selectedClinicId");
+
+              localStorage.setItem("selectedVetId", selectedVetId);
+
+              // Redirect to the vetSchedule page with the selected vet ID
+              window.location.href = `/appointment/new/select_date_time?vetId=${selectedVetId}&appointmentTypeId=${appointmentTypeId}&clinicId=${selectedClinicId}`;
+            } else {
+              alert("Please select a veterinarian to continue.");
+            }
+          });
+
+        // Back button logic
+        document
+          .querySelector(".back-button")
+          .addEventListener("click", function () {
+            // Redirect back to the appointment type selection page
+            window.location.href = `/appointment/new/select_clinic?appointmentTypeId=${appointmentTypeId}`;
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="login" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>New Appointment Scheduling</h1>
+      <h3>Select a Veterinarian:</h3>
+
+      <div th:each="vet : ${vets}" class="vet-card" th:data-vet-id="${vet.id}">
+        <h3
+          th:text="${vet.title + ' ' + vet.user.firstName + ' ' + vet.user.lastName}"
+        ></h3>
+        <p th:text="${vet.languagesSpoken}"></p>
+        <p th:text="${vet.selfDescription}"></p>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="button" class="back-button">Back</button>
+      <button type="button" class="continue-button">Continue</button>
+    </div>
+  </body>
+</html>

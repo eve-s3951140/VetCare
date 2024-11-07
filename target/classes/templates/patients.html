@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Patients</title>
+    <link rel="stylesheet" href="/css/patients.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Search bar filter logic
+        const searchInput = document.getElementById("searchInput");
+        searchInput.addEventListener("input", function () {
+          const filter = searchInput.value.toLowerCase();
+          const tableRows = document.querySelectorAll(
+            ".patients-table tbody tr"
+          );
+
+          tableRows.forEach((row) => {
+            const nameCell = row
+              .querySelector("td:first-child")
+              .textContent.toLowerCase();
+            if (nameCell.includes(filter)) {
+              row.style.display = "";
+            } else {
+              row.style.display = "none";
+            }
+          });
+        });
+
+        // Row click event logic
+        const tableRows = document.querySelectorAll(".patients-table tbody tr");
+        tableRows.forEach((row) => {
+          row.addEventListener("click", function () {
+            const petId = this.getAttribute("data-pet-id");
+            if (petId) {
+              window.location.href = `/petProfile?petId=${petId}`;
+            }
+          });
+        });
+
+        // Remove the originalPreviousPage that is for petProfile from localStorage
+        localStorage.removeItem("originalPreviousPage");
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <div class="header">
+      <a th:href="@{/vetDashboard(userId=, vetId=${vetId})}">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a
+        th:href="@{/vetProfile(vetId=${vetId})}"
+        id="profile-link"
+        class="profile-link"
+      >
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <!-- Navbar Section -->
+    <div class="nav-bar">
+      <a th:href="@{/vetDashboard(userId=, vetId=${vetId})}">Home</a>
+      <a
+        href="javascript:void(0)"
+        onclick="window.location.reload()"
+        class="active"
+        >Patients</a
+      >
+      <a
+        th:href="@{/schedule(vetId=${vetId}, weekStart=${weekStart})}"
+        class="schedule-link"
+        >Schedule</a
+      >
+      <a th:href="@{/availability(vetId=${vetId})}"
+         class="availability-link"
+      >Availability</a>
+      <a href="/faqPage">FAQ</a>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="container">
+      <h1>Your Patients</h1>
+      <p>
+        Total Number of Patients:
+        <span th:text="${pets.size()}"></span>
+      </p>
+      <p>Click on a patient to view their profile.</p>
+
+      <div class="search-bar-container">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search Patient by Name"
+          aria-label="Search Patient"
+        />
+      </div>
+
+      <!-- Table of patients and their details -->
+      <table class="patients-table">
+        <thead>
+          <tr>
+            <th>Pet Name</th>
+            <th>Species</th>
+            <th>Gender</th>
+            <th>Birth Date</th>
+            <th>Breed</th>
+            <th>Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Loop through appointments to display pets and owners -->
+          <tr
+            th:each="pet : ${pets}"
+            th:attr="data-pet-id=${pet.id}"
+            title="Click to access profile"
+          >
+            <td th:text="${pet.name}">Pet Name</td>
+            <td th:text="${pet.species}" class="min">Species</td>
+            <td th:text="${pet.gender}" class="min">Gender</td>
+            <td th:text="${pet.birthDate}" class="min">Birth Date</td>
+            <td th:text="${pet.breed}" class="min">Breed</td>
+            <td
+              th:text="${pet.petOwner.user.firstName + ' ' + pet.petOwner.user.lastName}"
+            >
+              Owner Name
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

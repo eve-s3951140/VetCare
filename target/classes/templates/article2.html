@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article 2</title>
+    <link rel="stylesheet" href="/css/articles.css" />
+  </head>
+  <script>
+    // Function to go back to the previous page when the back button is clicked
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the userId and petOwnerId from local storage
+      const userId = localStorage.getItem("userId");
+      const petOwnerId = localStorage.getItem("petOwnerId");
+
+      const backButton = document.getElementById("backButton");
+
+      backButton.addEventListener("click", function () {
+        window.history.back();
+      });
+
+      const profileLink = document.getElementById("profileLink");
+      const logoLink = document.getElementById("logoLink");
+
+      if (profileLink) {
+        profileLink.addEventListener("click", function () {
+          window.location.href = "/petOwnerProfile?petOwnerId=" + petOwnerId;
+        });
+      }
+
+      if (logoLink) {
+        logoLink.addEventListener("click", function () {
+          window.location.href =
+            "/petOwnerWelcome?userId=" + userId + "&petOwnerId=" + petOwnerId;
+        });
+      }
+    });
+  </script>
+  <body>
+    <div class="header">
+      <a id="logoLink">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a class="profile-link" id="profileLink">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="article-content">
+      <h1 class="article-title">
+        Adopting a Cat? 12 Cat Adoption Mistakes to Avoid
+      </h1>
+
+      <div class="article-header-image">
+        <img src="/images/article7.jpg" alt="Main article image" />
+      </div>
+
+      <!-- Author Credit Section -->
+      <div class="article-author">
+        <p>Written by: <strong>Author Name</strong></p>
+        <p>
+          Reviewed by: <strong>Reviewer Name</strong>, on 00/00/00, Published on
+          00/00/00
+        </p>
+      </div>
+
+      <div class="article-text-section">
+        <p>
+          Adopting a new cat is incredibly exciting. From picking out the
+          perfect name to readying the ultimate cat-friendly casa, there’s so
+          much to look forward to! However, cat adoption can often be a bit
+          overwhelming, too. And that goes for first-time cat parents and
+          seasoned cat moms and dads alike.
+        </p>
+        <p>
+          Welcoming a furry feline BFF to your home is a serious commitment. It
+          requires careful consideration and plenty of preparation. Here’s a
+          first-time cat owner checklist of what not to do if you’re considering
+          a new kitty companion.
+        </p>
+        <p>
+          Set yourself up for success by avoiding these common cat adoption
+          mistakes!
+        </p>
+      </div>
+
+      <div class="article-image-with-text">
+        <img src="/images/article12.jpg" alt="Side article image" />
+        <div class="side-text">
+          <h2>Rushing Into Adoption</h2>
+          <p>
+            Caring for a cat is infinitely rewarding, but it also requires
+            significant time, effort, and money. Before looking at adoptable
+            cats, make sure all members of your household are on board with the
+            idea.
+          </p>
+          <p>
+            “Discuss the idea with the entire family,” urges Steve Dale, a
+            Chicago-based certified animal behavior consultant (CABC) and
+            adoption advocate. “While cats are less of a time commitment than
+            dogs, they do take time, and there’s the financial commitment to
+            consider, as well.”
+          </p>
+          <p>
+            It’s easy to get lost in the excitement of searching for (and
+            finding!) your kitty soul mate. But there are plenty of less
+            exciting pet parent chores to consider, too. Like litter box
+            scooping.
+          </p>
+          <p>
+            Make sure you have a plan for how to handle such tasks before you
+            seal the deal with your adorable adoptee.
+          </p>
+        </div>
+      </div>
+
+      <div class="article-text-section">
+        <h2>Only Looking at Kittens</h2>
+        <p>
+          Who doesn’t want a kitten? Famously cute, curious, and cuddly,
+          itty-bitty kitties are often the most popular pets at any shelter.
+          However, it’s a good idea to remain open to a cat or kitten when you
+          visit the shelter.
+        </p>
+        <p>
+          Kittens can be very active and constantly crave attention. And that
+          means they may not be the perfect match for everyone. If you’re not
+          prepared to keep your always-on, high-energy housemate entertained,
+          adopting an older cat may be the right fit for you.
+        </p>
+        <h2>Failing to Cat-Proof Your Home</h2>
+        <p>
+          Before bringing home a new cat, ensure the environment is safe for
+          your curious feline friend. Here are a few cat care tips for beginners
+          to keep your kitty safe.
+        </p>
+        <ul>
+          <li>Make sure window screens are sturdy and secure</li>
+          <li>Tie up cords for blinds and curtains</li>
+          <li>Replace toxic house plants with cat-safe greenery</li>
+          <li>Remove or secure choking hazards</li>
+          <li>Ensure doors close fully</li>
+          <li>Secure loose wires</li>
+          <li>
+            Keep toilets closed around kittens (if you have young children,
+            toilet locks can help)
+          </li>
+        </ul>
+      </div>
+
+      <!-- Section with the image on the right -->
+      <div class="article-image-with-text image-right">
+        <img src="/images/article9.jpg" alt="Side article image" />
+        <div class="side-text">
+          <h2>Not Creating a Safe Space</h2>
+          <p>
+            A new cat shouldn’t be given access to the entire house. Instead,
+            provide your cat with a safe space they can use as a home base. This
+            should be somewhere away from the hustle and bustle, says animal
+            behavior manager Karen Reese from Operation Kindness, an animal
+            shelter in north Texas.
+          </p>
+
+          <blockquote>
+            “Cats adjusting to a new home may not do well with a lot of noise
+            and traffic,” says Reese.
+          </blockquote>
+
+          <blockquote>
+            “Set up a safe area in a bedroom or bathroom. That way, the cat can
+            have this space all to themselves at first.”
+          </blockquote>
+
+          <p>
+            This space should include necessities (food, water, and a litter
+            box) as well as creature comforts (a cozy bed, a scratching post,
+            and toys).
+          </p>
+
+          <p>
+            Spend time bonding with your cat somewhere safe to help them settle
+            into their new home. Then offer them more freedom to explore over
+            the next few days.
+          </p>
+
+          <blockquote>
+            “As your cat gets comfortable, you can offer them more space in your
+            home,” says Reese. “But make sure they always have access to their
+            safe area.”
+          </blockquote>
+
+          <blockquote>
+            “It can also help to ensure they have access to other hiding spaces
+            around your home,” she continues. “These can be under or behind
+            furniture, covered cat beds, or even boxes turned on their sides.”
+          </blockquote>
+        </div>
+      </div>
+    </div>
+    <!-- Back button to go to the previous page -->
+    <button class="back-button" id="backButton">Back</button>
+  </body>
+</html>

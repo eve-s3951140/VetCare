@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Confirm Appointment</title>
+    <link rel="stylesheet" href="/css/confirmAppointment.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the userId and petOwnerId
+        const userId = localStorage.getItem("userId");
+        const petOwnerId = localStorage.getItem("petOwnerId");
+
+        // Set the links for the logo and profile icon using class selectors
+        const logoLink = document.querySelector(".logo-link");
+        const profileLink = document.querySelector(".profile-link");
+
+        if (logoLink && userId && petOwnerId) {
+          logoLink.href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+        } else {
+          console.error("logo-link not found or userId/petOwnerId is missing.");
+        }
+
+        if (profileLink && petOwnerId) {
+          profileLink.href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+        } else {
+          console.error("profile-link not found or petOwnerId is missing.");
+        }
+
+        document
+          .querySelector(".back-button")
+          .addEventListener("click", function () {
+            const selectedAppointmentTypeId = localStorage.getItem(
+              "selectedAppointmentTypeId"
+            );
+            const selectedVetId = localStorage.getItem("selectedVetId");
+            window.location.href = `/appointment/new/select_date_time?vetId=${selectedVetId}&appointmentTypeId=${selectedAppointmentTypeId}`;
+          });
+      });
+
+      function confirmAppointment() {
+        // Retrieve values from local storage
+        document.getElementById("selectedAppointmentTypeId").value =
+          localStorage.getItem("selectedAppointmentTypeId");
+        document.getElementById("selectedPetId").value =
+          localStorage.getItem("selectedPetId");
+        document.getElementById("selectedVetId").value =
+          localStorage.getItem("selectedVetId");
+        document.getElementById("selectedAppointmentDate").value =
+          localStorage.getItem("selectedAppointmentDate");
+        document.getElementById("selectedAppointmentTime").value =
+          localStorage.getItem("selectedAppointmentTime");
+        document.getElementById("selectedAppointmentTypeDuration").value =
+          localStorage.getItem("selectedAppointmentTypeDuration");
+        document.getElementById("userId").value =
+          localStorage.getItem("userId");
+        document.getElementById("petOwnerId").value =
+          localStorage.getItem("petOwnerId");
+
+        // clear local storage relevant data
+        if (localStorage.getItem("selectedPetId")) {
+          localStorage.removeItem("selectedPetId");
+        }
+        if (localStorage.getItem("selectedAppointmentTypeId")) {
+          localStorage.removeItem("selectedAppointmentTypeId");
+        }
+        if (localStorage.getItem("selectedAppointmentTypeDuration")) {
+          localStorage.removeItem("selectedAppointmentTypeDuration");
+        }
+        if (localStorage.getItem("selectedClinicId")) {
+          localStorage.removeItem("selectedClinicId");
+        }
+        if (localStorage.getItem("selectedVetId")) {
+          localStorage.removeItem("selectedVetId");
+        }
+        if (localStorage.getItem("selectedAppointmentDate")) {
+          localStorage.removeItem("selectedAppointmentDate");
+        }
+        if (localStorage.getItem("selectedAppointmentTime")) {
+          localStorage.removeItem("selectedAppointmentTime");
+        }
+
+        alert("Your appointment is now confirmed. Thank you.");
+
+        // Submit the form
+        document.getElementById("confirmAppointmentForm").submit();
+      }
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="#" class="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="login" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>New Appointment Scheduling</h1>
+      <h3>Confirm your Appointment:</h3>
+
+      <div class="appointment-summary">
+        <p><strong>Clinic:</strong> <span th:text="${clinicName}"></span></p>
+        <p>
+          <strong>Appointment Type:</strong>
+          <span th:text="${appointmentTypeName}"></span>
+        </p>
+        <p>
+          <strong>Price:</strong>
+          <span
+            th:text="'$ ' + ${#numbers.formatDecimal(price, 1, 'POINT', 2, 'POINT')}"
+          ></span>
+        </p>
+        <p><strong>Pet:</strong> <span th:text="${petInfo}"></span></p>
+        <p><strong>Date:</strong> <span th:text="${appointmentDate}"></span></p>
+        <p><strong>Time:</strong> <span th:text="${appointmentTime}"></span></p>
+        <p>
+          <strong>Veterinarian:</strong> <span th:text="${vetTitleName}"></span>
+        </p>
+      </div>
+
+      <div class="buttons">
+        <button type="button" class="back-button">Back</button>
+        <form
+          id="confirmAppointmentForm"
+          enctype="multipart/form-data"
+          th:action="@{/appointment/new/confirmation}"
+          method="POST"
+        >
+          <input
+            type="hidden"
+            name="selectedAppointmentTypeId"
+            id="selectedAppointmentTypeId"
+          />
+          <input type="hidden" name="selectedPetId" id="selectedPetId" />
+          <input type="hidden" name="selectedVetId" id="selectedVetId" />
+          <input
+            type="hidden"
+            name="selectedAppointmentDate"
+            id="selectedAppointmentDate"
+          />
+          <input
+            type="hidden"
+            name="selectedAppointmentTime"
+            id="selectedAppointmentTime"
+          />
+          <input
+            type="hidden"
+            name="selectedAppointmentTypeDuration"
+            id="selectedAppointmentTypeDuration"
+          />
+          <input type="hidden" name="userId" id="userId" />
+          <input type="hidden" name="petOwnerId" id="petOwnerId" />
+          <button
+            type="button"
+            class="confirm-button"
+            onclick="confirmAppointment();"
+          >
+            Confirm
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

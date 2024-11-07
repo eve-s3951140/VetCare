@@ -1,0 +1,165 @@
+/* Basic Page and Typography Settings */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif; /* Font for the entire page */
+  background-color: #f5f5f5; /* Light background color */
+}
+
+/* Header Styling */
+.header {
+  width: 100%;
+  background-color: #007bff; /* Blue background for the header */
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Space between logo and profile icon */
+}
+
+.header img.logo {
+  width: 50px; /* Logo width */
+  height: auto;
+  margin-left: 15px;
+}
+
+.profile-link {
+  margin-right: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  width: 45px; /* Size of profile icon */
+  height: 45px;
+  border-radius: 50%; /* Rounded profile icon */
+  background-color: white; /* White background for icon */
+  padding: 5px; /* Padding inside the profile icon */
+}
+
+/* Navbar Styling */
+.navbar {
+  background-color: #d3edf8; /* Light blue background */
+  display: flex;
+  justify-content: center; /* Center the navigation items */
+  padding: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+.navbar ul {
+  display: flex;
+  list-style-type: none; /* Remove default list styling */
+  margin: 0;
+  padding: 0;
+}
+
+.navbar li {
+  margin: 0 20px; /* Space between navigation items */
+}
+
+.navbar a {
+  text-decoration: none; /* Remove underline from links */
+  color: #333; /* Dark text color */
+  font-size: 18px; /* Font size for links */
+  padding: 10px 20px;
+  border-radius: 4px; /* Rounded corners */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Smooth hover effect */
+}
+
+.navbar a:hover {
+  background-color: #007bff; /* Blue background on hover */
+  color: white; /* White text color on hover */
+}
+
+/* Article Page Main Content */
+.article-content {
+  max-width: 1000px; /* Maximum width for content */
+  margin: 20px auto; /* Center content and add top/bottom margin */
+  padding: 20px 40px; /* Add padding to all sides, more on left and right */
+  box-sizing: border-box; /* Ensure padding does not affect total width */
+  background-color: #fff; /* Optional: Add background color for better visibility */
+  border-radius: 8px; /* Optional: Add rounded corners */
+}
+
+/* Article Header Image */
+.article-header-image img {
+  width: 100%; /* Make image responsive */
+  height: auto;
+  border-radius: 8px; /* Rounded corners for the image */
+}
+
+/* Article Title */
+.article-title {
+  font-size: 36px; /* Larger font size for the title */
+  text-align: center; /* Center the title */
+  margin-top: 10px; /* Reduced margin to decrease the gap */
+  margin-bottom: 20px; /* Add margin at the bottom for spacing from the image */
+  color: #333; /* Dark text color */
+  padding: 0 10px;
+}
+
+/* Article Text Sections */
+.article-text-section {
+  background-color: #f1f1f1; /* Light grey background */
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px; /* Rounded corners */
+}
+
+.article-text-section h2 {
+  margin-top: 0; /* Remove default margin from heading */
+}
+
+/* Image with Text Section */
+.article-image-with-text {
+  display: flex; /* Align image and text side by side */
+  margin-top: 20px;
+  align-items: center; /* Vertically center-align content */
+}
+
+/* Default Image on the left */
+.article-image-with-text img {
+  width: 50%; /* Image takes up half the width of the container */
+  height: auto;
+  border-radius: 8px; /* Rounded corners */
+  margin-right: 20px; /* Add space between image and text */
+}
+
+/* Specific styling for the section with image on the right */
+.image-right {
+  flex-direction: row-reverse; /* Move the image to the right side */
+}
+
+.image-right img {
+  margin-left: 20px; /* Add space between image and text */
+  margin-right: 0; /* Remove any previous right margin */
+}
+
+.side-text {
+  width: 50%; /* Text takes up the other half of the container */
+}
+
+.side-text h2 {
+  margin-top: 0; /* Remove default margin from heading */
+}
+
+.side-text p {
+  margin-top: 10px;
+}
+
+.back-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  opacity: 0.8;
+}

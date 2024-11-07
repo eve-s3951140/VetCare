@@ -1,0 +1,287 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+}
+
+.header {
+  width: 100%;
+  background-color: #007bff;
+  padding: 15px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header img.logo {
+  width: 50px;
+  height: auto;
+  margin-left: 20px;
+}
+
+.profile-link {
+  margin-right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.profile-icon {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: white;
+  padding: 5px;
+  border: 2px solid #007bff;
+}
+
+.container {
+  max-width: 900px;
+  margin: 30px auto;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.pet-info-header {
+  display: flex;
+  justify-content: space-between; 
+  align-items: center;
+  font-size: 2em;
+  padding: 10px 0;
+}
+
+.icons-container {
+  display: flex;
+  gap: 3rem;
+}
+
+.share-icon, .download-icon{
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+}
+
+h1 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Base card styling for all sections (Pet, Medication, Health, Owner, Immunisation, Surgery) */
+.pet-profile-card,
+.medication-profile-card,
+.health-profile-card,
+.owner-profile-card,
+.immunisation-profile-card,
+.surgery-profile-card {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  margin-bottom: 20px;
+}
+
+/* Base info box styling */
+.pet-info-box,
+.medication-info-box,
+.health-info-box,
+.owner-info-box,
+.immunisation-info-box,
+.surgery-info-box {
+  background-color: #e7f6fc;
+  padding: 30px;
+  border-radius: 10px;
+  border: 2px solid #007bff;
+  width: 100%;
+}
+
+/* Header styling for the info boxes */
+.pet-info-header,
+.medication-info-header,
+.health-info-header,
+.owner-info-header,
+.immunisation-info-header,
+.surgery-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 24px;
+  color: #007bff;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Edit icon styling */
+.edit-icon {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}
+
+/* Content layout for information */
+.pet-info-content,
+.medication-info-content,
+.health-info-content,
+.owner-info-content,
+.immunisation-info-content,
+.surgery-info-content {
+  align-items: flex-start;
+}
+
+/* Image and picture layout for different sections */
+.pet-picture img,
+.medication-picture img {
+  border-radius: 10px;
+  width: 280px;
+  height: 225px;
+  object-fit: cover;
+  margin-right: 30px;
+}
+
+.medication-picture img {
+  width: 200px;
+  height: 200px;
+}
+
+/* Details section styling */
+.pet-details,
+.medication-details,
+.health-details,
+.owner-details {
+  background-color: #f0f9ff;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #007bff;
+}
+
+/* Paragraphs inside the details section */
+.pet-details p,
+.medication-details p,
+.health-details p,
+.owner-details p {
+  margin: 8px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+/* Immunisation and Surgery Table */
+.immunisation-info-content table,
+.surgery-info-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.immunisation-info-content table th,
+.immunisation-info-content table td,
+.surgery-info-content table th,
+.surgery-info-content table td {
+  border: 1px solid #007bff;
+  padding: 10px;
+  text-align: left;
+}
+
+.immunisation-info-content table th,
+.surgery-info-content table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.hidden {
+  display: none;
+}
+
+li {
+  margin-bottom: 1rem;
+}
+
+.immunisation-date-column,
+.immunisation-name-column,
+.surgery-date-column,
+.surgery-name-column {
+  width: 1%;
+  white-space: nowrap;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.large-textbox {
+  width: 100%;
+  max-width: 75%;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Ensure the table occupies full width */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Style for table cells */
+td {
+  padding: 8px;
+  border: 1px solid #ddd;
+}
+
+/* Style for the date input to be as small as possible */
+input[type="date"] {
+  width: 120px; 
+  box-sizing: border-box; 
+  max-width: 100%;
+}
+
+/* Optional: Add some margin and border styling for visual clarity */
+input[type="date"] {
+  margin: 0;
+  padding: 4px;
+  border: 1px solid #ccc;
+}
+
+#editImmunisationTableBody td input[type="text"],
+#editSurgeryTableBody td input[type="text"] {
+  width: 95%;
+}
+
+#newMedicationContainer {
+  clear: both; /* Ensures it starts on a new line */
+}
+
+.medication-card {
+  background-color: #f0f9ff;
+  padding: 10px;
+  border: 1px solid #007bff;
+  border-radius: 5px;
+}
+
+.back-button {
+  position: fixed;        
+  bottom: 20px;           
+  left: 20px;             
+  padding: 10px 20px;     
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  opacity: 0.8;
+}

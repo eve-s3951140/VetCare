@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pet Owner Profile</title>
+  <link rel="stylesheet" href="/css/petOwnerProfile.css" />
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const userID = localStorage.getItem("userId");
+      const petOwnerID = localStorage.getItem("petOwnerId");
+      const vetID = localStorage.getItem("vetId");
+
+      // Get elements for pet owner and vet navigation
+      const petOwnerNavbar = document.getElementById("petOwnerNavbar");
+      const petOwnerHeader = document.getElementById("petOwnerHeader");
+      const vetHeader = document.getElementById("vetHeader");
+
+      // Get the back button
+      const backButton = document.querySelector(".back-button");
+
+      // Get edit profile and log out buttons
+      const buttons = document.querySelector(".profile-actions");
+
+      if (petOwnerID && userID) {
+        // Set the value of the hidden user id input field
+        document.getElementById("edit-userId").value = userID;
+        // Set the value of the hidden pet owner id input field
+        document.getElementById("edit-petOwnerId").value = petOwnerID;
+
+        // Show Pet Owner Navbar
+        petOwnerNavbar.style.display = "flex";
+        petOwnerHeader.style.display = "flex";
+        vetHeader.style.display = "none";
+
+        // Hide back button
+        backButton.style.display = "none";
+
+        // Display the edit and logout buttons
+        buttons.style.display = "flex";
+
+        const petOwnerDashboardLink = document.querySelector(
+                "#pet-owner-dashboard-link"
+        );
+        // Update Pet Owner Links
+        const petOwnerLogoLink = document.getElementById("petOwnerLogoLink");
+        const petOwnerProfileLink = document.getElementById(
+                "petOwnerProfileLink"
+        );
+        const petOwnerHomeLink = document.getElementById("petOwnerHomeLink");
+
+        if (petOwnerDashboardLink) {
+          petOwnerDashboardLink.href = `/petOwnerWelcome?userId=${userID}&petOwnerId=${petOwnerID}`;
+        }
+        if (petOwnerLogoLink) {
+          petOwnerLogoLink.href = `/petOwnerWelcome?userId=${userID}&petOwnerId=${petOwnerID}`;
+        }
+        if (petOwnerHomeLink) {
+          petOwnerHomeLink.href = `/petOwnerWelcome?userId=${userID}&petOwnerId=${petOwnerID}`;
+        }
+        if (petOwnerProfileLink) {
+          petOwnerProfileLink.href = `/petOwnerProfile?petOwnerId=${petOwnerID}`;
+        }
+      } else if (vetID && userID) {
+        // Show Vet Navbar
+        petOwnerNavbar.style.display = "none";
+        petOwnerHeader.style.display = "none";
+        vetHeader.style.display = "flex";
+
+        // Show back button
+        backButton.style.display = "block";
+
+        // Hide edit and logout buttons
+        buttons.style.display = "none";
+
+        // Update Vet Links
+        const vetLogoLink = document.getElementById("vetLogoLink");
+        const vetProfileLink = document.getElementById("vetProfileLink");
+
+        if (vetLogoLink) {
+          vetLogoLink.href = `/vetDashboard?vetId=${vetID}`;
+        }
+        if (vetProfileLink) {
+          vetProfileLink.href = `/vetProfile?vetId=${vetID}`;
+        }
+      } else {
+        window.location.href = "/login";
+      }
+    });
+
+    function editProfile() {
+      document.getElementById("viewMode").style.display = "none";
+      document.getElementById("editMode").style.display = "block";
+    }
+
+    function cancelEdit() {
+      document.getElementById("editMode").style.display = "none";
+      document.getElementById("viewMode").style.display = "block";
+    }
+
+    function logout() {
+      window.location.href = "/login";
+    }
+
+    window.onload = loadProfile;
+  </script>
+</head>
+<body>
+<!-- Pet Owner Header and Navbar -->
+<div class="header" id="petOwnerHeader" style="display: none">
+  <a id="petOwnerLogoLink"
+  ><img src="/images/logo.png" alt="Logo" class="logo"
+  /></a>
+  <a id="petOwnerProfileLink" class="profile-link"
+  ><img src="/images/profile.png" alt="Profile" class="profile-icon"
+  /></a>
+</div>
+
+<div class="navbar" id="petOwnerNavbar" style="display: none">
+  <ul>
+    <li><a id="petOwnerHomeLink" class="active">Home</a></li>
+    <li><a th:href="@{/petList(petOwnerId=${petOwner.id})}">Pets</a></li>
+    <li><a href="/trendsHome">Articles & Videos</a></li>
+    <li><a th:href="@{/prescriptions(petOwnerId=${petOwner.id})}">Prescriptions</a></li>
+    <li><a href="#faq">FAQ</a></li>
+  </ul>
+</div>
+
+<!-- Vet Header -->
+<div class="header" id="vetHeader" style="display: none">
+  <a id="vetLogoLink"
+  ><img src="/images/logo.png" alt="Logo" class="logo"
+  /></a>
+  <a id="vetProfileLink" class="profile-link"
+  ><img src="/images/profile.png" alt="Profile" class="profile-icon"
+  /></a>
+</div>
+
+<div class="profile-container">
+  <h1>Pet Owner Profile Details</h1>
+  <div class="profile-card">
+    <div id="viewMode">
+      <div class="profile-info">
+        <p>
+          <strong>First Name:</strong>
+          <span th:text="${user.firstName}"></span>
+        </p>
+        <p>
+          <strong>Last Name:</strong>
+          <span th:text="${user.lastName}"></span>
+        </p>
+        <p>
+          <strong>Date of Birth:</strong>
+          <span th:text="${user.birthDate}"></span>
+        </p>
+        <p>
+          <strong>Gender:</strong> <span th:text="${user.gender}"></span>
+        </p>
+        <p>
+          <strong>Phone Number:</strong>
+          <span th:text="${user.phoneNumber}"></span>
+        </p>
+        <p><strong>Email:</strong> <span th:text="${user.email}"></span></p>
+
+        <h3>Address</h3>
+        <p>
+          <strong>Street:</strong>
+          <span th:text="${address.street}"></span>
+        </p>
+        <p>
+          <strong>Suburb:</strong> <span th:text="${address.suburb}"></span>
+        </p>
+        <p>
+          <strong>State:</strong> <span th:text="${address.state}"></span>
+        </p>
+        <p>
+          <strong>Postcode:</strong>
+          <span th:text="${address.postcode}"></span>
+        </p>
+
+        <div class="profile-actions">
+          <button type="button" class="edit-button" onclick="editProfile()">
+            Edit Profile
+          </button>
+          <button type="button" class="logout-button" onclick="logout()">
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="editMode" style="display: none">
+      <form
+              id="profileForm"
+              enctype="multipart/form-data"
+              th:action="@{/petOwnerProfile}"
+              method="POST"
+      >
+        <div class="profile-info">
+          <p>
+            <input
+                    type="hidden"
+                    name="edit-userId"
+                    id="edit-userId"
+                    value=""
+            />
+            <input
+                    type="hidden"
+                    name="edit-petOwnerId"
+                    id="edit-petOwnerId"
+                    value=""
+            />
+            <input
+                    type="hidden"
+                    name="edit-password"
+                    id="edit-password"
+                    th:value="${user.password}"
+            />
+
+            <strong>First Name:</strong
+            ><input
+                  type="text"
+                  id="edit-firstname"
+                  name="edit-firstname"
+                  th:value="${user.firstName}"
+                  placeholder="First Name"
+                  required
+          />
+          </p>
+          <p>
+            <strong>Last Name:</strong
+            ><input
+                  type="text"
+                  id="edit-lastname"
+                  name="edit-lastname"
+                  th:value="${user.lastName}"
+                  placeholder="Last Name"
+                  required
+          />
+          </p>
+          <p>
+            <strong>Date of Birth:</strong
+            ><input
+                  type="date"
+                  id="edit-dob"
+                  name="edit-dob"
+                  th:value="${user.birthDate}"
+                  required
+          />
+          </p>
+          <p>
+            <strong>Gender:</strong>
+            <select
+                    id="edit-gender"
+                    name="gender"
+                    th:field="*{user.gender}"
+            >
+              <option th:value="Male">Male</option>
+              <option th:value="Female">Female</option>
+              <option th:value="Others">Others</option>
+            </select>
+          </p>
+          <p>
+            <strong>Phone Number:</strong
+            ><input
+                  type="tel"
+                  id="edit-phone"
+                  name="edit-phone"
+                  th:value="${user.phoneNumber}"
+                  placeholder="Phone Number"
+                  required
+          />
+          </p>
+          <p>
+            <strong>Email:</strong
+            ><input
+                  type="email"
+                  id="edit-email"
+                  name="edit-email"
+                  th:value="${user.email}"
+                  placeholder="Email"
+                  required
+          />
+          </p>
+
+          <h3>Address</h3>
+          <p>
+            <strong>Street:</strong
+            ><input
+                  type="text"
+                  id="edit-streetAddress"
+                  name="edit-streetAddress"
+                  th:value="${address.street}"
+                  placeholder="Street Address"
+                  required
+          />
+          </p>
+          <p>
+            <strong>Suburb:</strong
+            ><input
+                  type="text"
+                  id="edit-suburb"
+                  name="edit-suburb"
+                  th:value="${address.suburb}"
+                  placeholder="Suburb"
+                  required
+          />
+          </p>
+          <p>
+            <strong>State:</strong
+            ><input
+                  type="text"
+                  id="edit-state"
+                  name="edit-state"
+                  th:value="${address.state}"
+                  placeholder="State"
+                  required
+          />
+          </p>
+          <p>
+            <strong>Postcode:</strong
+            ><input
+                  type="text"
+                  id="edit-postcode"
+                  name="edit-postcode"
+                  th:value="${address.postcode}"
+                  placeholder="Postcode"
+                  required
+          />
+          </p>
+
+          <div class="profile-actions">
+            <button
+                    type="button"
+                    class="cancel-button"
+                    onclick="cancelEdit()"
+            >
+              Cancel
+            </button>
+            <button type="submit" class="save-button">Save Changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- Back button to previous page (depending on pet owner or vet) -->
+<button class="back-button" onclick="window.history.back()">Back</button>
+</body>
+</html>

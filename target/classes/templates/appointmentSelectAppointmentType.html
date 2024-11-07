@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Appointment Scheduling</title>
+    <link rel="stylesheet" href="/css/appointmentType.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the userId and petOwnerId from local storage
+        const userId = localStorage.getItem("userId");
+        const petOwnerId = localStorage.getItem("petOwnerId");
+
+        // Set the links for the logo and profile icon
+        document.querySelector(
+          ".logo-link"
+        ).href = `/petOwnerWelcome?userId=${userId}&petOwnerId=${petOwnerId}`;
+        document.querySelector(
+          ".profile-link"
+        ).href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+
+        const typeCards = document.querySelectorAll(".appointment-type-card");
+
+        // Make the entire card clickable
+        typeCards.forEach((card) => {
+          card.addEventListener("click", function () {
+            // Remove the 'selected' class from all cards
+            typeCards.forEach((c) => c.classList.remove("selected"));
+
+            // Add 'selected' class to the clicked card
+            card.classList.add("selected");
+          });
+        });
+
+        // Continue button logic
+        document
+          .querySelector(".continue-button")
+          .addEventListener("click", function () {
+            const selectedCard = document.querySelector(
+              ".appointment-type-card.selected"
+            );
+            const urlParams = new URLSearchParams(window.location.search);
+
+            if (selectedCard) {
+              const selectedAppointmentTypeId = selectedCard.getAttribute(
+                "data-appointment-type-id"
+              );
+              const appointmentTypeName =
+                selectedCard.querySelector("h3").textContent;
+              const selectedAppointmentTypeDuration = selectedCard
+                .querySelector("p")
+                .textContent.split(" ")[0];
+
+              localStorage.setItem(
+                "selectedAppointmentTypeId",
+                selectedAppointmentTypeId
+              );
+              localStorage.setItem(
+                "selectedAppointmentTypeDuration",
+                selectedAppointmentTypeDuration
+              );
+
+              // Redirect to the clinic list page with the selected appointment type ID
+              window.location.href = `/appointment/new/select_clinic?appointmentTypeId=${selectedAppointmentTypeId}`;
+            } else {
+              alert("Please select an appointment type to continue.");
+            }
+          });
+
+        // Back button logic
+        document
+          .querySelector(".back-button")
+          .addEventListener("click", function () {
+            // Redirect to the select pet page
+            window.location.href = `/appointment/new/select_pet?petOwnerId=${petOwnerId}`;
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/" class="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="login" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="container">
+      <h1>New Appointment Scheduling</h1>
+      <h3>Select an Appointment Type:</h3>
+
+      <div
+        th:each="appointmentType : ${appointmentTypes}"
+        class="appointment-type-card"
+        th:data-appointment-type-id="${appointmentType.id}"
+      >
+        <h3 th:text="${appointmentType.name}"></h3>
+        <p th:text="${appointmentType.duration} + ' min'"></p>
+        <p th:text="${appointmentType.description}"></p>
+      </div>
+    </div>
+
+    <div class="buttons">
+      <button type="button" class="back-button">Back</button>
+      <button type="button" class="continue-button">Continue</button>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pet Owner Welcome Page</title>
+    <link rel="stylesheet" href="/css/ownerWelcome.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Fetch the userId from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlUserID = urlParams.get("userId");
+        const urlPetOwnerID = urlParams.get("petOwnerId");
+
+        // Check if userId is not already stored
+        if (urlUserID && !localStorage.getItem("userId")) {
+          localStorage.setItem("userId", urlUserID);
+        }
+
+        // Check if petOwnerId is not already stored
+        if (urlPetOwnerID && !localStorage.getItem("petOwnerId")) {
+          localStorage.setItem("petOwnerId", urlPetOwnerID);
+        }
+
+        // Schedule new appointment button logic
+        document
+          .querySelector(".new-schedule-btn")
+          .addEventListener("click", function () {
+            const petOwnerID = localStorage.getItem("petOwnerId");
+            // redirect to select pet page
+            window.location.href = `appointment/new/select_pet?petOwnerId=${petOwnerID}`;
+          });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a
+        th:href="@{/petOwnerWelcome(userId=${petOwner.user.id})}"
+        id="logo-link"
+      >
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a
+        th:href="@{/petOwnerProfile(petOwnerId=${petOwner.id})}"
+        id="profile-link"
+        class="profile-link"
+      >
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="navbar">
+      <ul>
+        <li>
+          <a
+            th:href="@{/petOwnerWelcome(userId=${petOwner.user.id})}"
+            class="active"
+            >Home</a
+          >
+        </li>
+        <li><a th:href="@{/petList(petOwnerId=${petOwner.id})}">Pets</a></li>
+        <li><a href="/trendsHome">Articles & Videos</a></li>
+        <li>
+          <a th:href="@{/prescriptions(petOwnerId=${petOwner.id})}"
+            >Prescriptions</a
+          >
+        </li>
+        <li><a href="/faqPage">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="welcome-text-container"></div>
+
+    <div class="welcome-text">
+      <h1>
+        Welcome,
+        <span th:text="${petOwner.user.firstName}"></span>
+        <span th:text="${petOwner.user.lastName}"></span>
+      </h1>
+      <div class="appointment-header">
+        <h2>Upcoming Appointment</h2>
+        <button type="button" class="new-schedule-btn">
+          Schedule New Appointment
+        </button>
+      </div>
+    </div>
+
+    <div
+      th:if="${upcomingAppointments != null && !upcomingAppointments.isEmpty()}"
+      class="appointments-container"
+    >
+      <!-- Loop through each upcoming appointment -->
+      <div
+        th:each="appointment : ${upcomingAppointments}"
+        class="appointment-container"
+      >
+        <h4>
+          Clinic:
+          <span th:text="${appointment.vet.clinic.name}"></span>
+        </h4>
+        <h4>
+          Appointment Type:
+          <span th:text="${appointment.appointmentType.name}"></span>
+        </h4>
+        <h4>
+          Pet:
+          <span
+            th:text="${appointment.pet.name} + ' (' + ${appointment.pet.gender} + ' - ' + ${appointment.pet.breed} + ')'"
+          ></span>
+        </h4>
+        <h4>
+          Date:
+          <span th:text="${appointment.date}"></span>
+        </h4>
+        <h4>
+          Time:
+          <span
+            th:text="${appointment.startTime} + ' - ' + ${appointment.endTime}"
+          ></span>
+        </h4>
+        <h4>
+          Veterinarian:
+          <span
+            th:text="${appointment.vet.title} + ' ' + ${appointment.vet.user.firstName} + ' ' + ${appointment.vet.user.lastName}"
+          ></span>
+        </h4>
+
+        <div class="appointment-actions">
+          <a
+            th:href="@{/appointment/reschedule/select_date_time(appointmentId=${appointment.id}, vetId=${appointment.vet.id}, appointmentTypeDuration=${appointment.appointmentType.duration})}"
+          >
+            <button class="reschedule-btn">Reschedule</button>
+          </a>
+          <a th:href="@{/appointment/cancel(appointmentId=${appointment.id})}">
+            <button class="cancel-btn">Cancel</button>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div
+      th:if="${upcomingAppointments == null || upcomingAppointments.isEmpty()}"
+      class="no-appointments"
+      style="margin-left: 15rem"
+    >
+      <p>No upcoming appointments.</p>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Your Availability</title>
+    <!-- Updated to use patients.css -->
+    <link rel="stylesheet" href="/css/patients.css" />
+</head>
+<body>
+<!-- Header Section -->
+<div class="header">
+    <a th:href="@{/vetDashboard(userId=${userId}, vetId=${vetId})}">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+    </a>
+    <a th:href="@{/vetProfile(vetId=${vetId})}" id="profile-link" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+    </a>
+</div>
+
+<!-- Navbar Section -->
+<div class="nav-bar">
+    <a th:href="@{/vetDashboard(userId=${userId}, vetId=${vetId})}">Home</a>
+    <a th:href="@{/patients(vetId=${vetId})}">Patients</a>
+    <a th:href="@{/schedule(vetId=${vetId}, weekStart=${weekStart})}">Schedule</a>
+    <a href="javascript:void(0)" onclick="window.location.reload()" class="active">Availability</a>
+    <a th:href="@{/faqPage}">FAQ</a>
+</div>
+
+<!-- Main Content Section -->
+<div class="container">
+    <h1>Your Availability</h1>
+
+    <!-- Form Section -->
+    <div class="form-container">
+        <h2>Create New Availability</h2>
+        <form th:action="@{/availability}" method="POST">
+            <input type="hidden" name="vetId" th:value="${param.vetId}" />
+
+            <div class="form-group">
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required />
+            </div>
+
+            <div class="form-group">
+                <label for="startTime">Start Time:</label>
+                <input type="time" id="startTime" name="startTime" required />
+            </div>
+
+            <div class="form-group">
+                <label for="endTime">End Time:</label>
+                <input type="time" id="endTime" name="endTime" required />
+            </div>
+
+            <button type="submit" class="save-button">Save Availability</button>
+        </form>
+
+        <div th:if="${successMessage != null}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
+        </div>
+        <div th:if="${errorMessage != null}" class="alert alert-danger">
+            <p th:text="${errorMessage}"></p>
+        </div>
+    </div>
+
+    <!-- Optional search bar -->
+    <div class="search-bar-container">
+        <input
+                type="text"
+                id="searchInput"
+                placeholder="Search Availability by Date"
+                aria-label="Search Availability"
+        />
+    </div>
+
+    <!-- Availability List Section -->
+    <table class="patients-table">
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="va : ${availabilities}" th:attr="data-date=${va.availability.date}">
+            <td th:text="${va.availability.date}"></td>
+            <td th:text="${va.availability.startTime}"></td>
+            <td th:text="${va.availability.endTime}"></td>
+            <td>
+                <a th:href="@{/availability/delete(vetId=${vetId}, date=${va.availability.date})}"
+                   class="delete-button"
+                   onclick="return confirm('Are you sure you want to delete this availability?');">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Optional JavaScript for search functionality -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Search bar filter logic
+        const searchInput = document.getElementById("searchInput");
+        searchInput.addEventListener("input", function () {
+            const filter = searchInput.value.toLowerCase();
+            const tableRows = document.querySelectorAll(
+                ".patients-table tbody tr"
+            );
+
+            tableRows.forEach((row) => {
+                const dateCell = row
+                    .querySelector("td:first-child")
+                    .textContent.toLowerCase();
+                if (dateCell.includes(filter)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

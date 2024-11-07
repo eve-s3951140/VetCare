@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trends Page</title>
+    <link rel="stylesheet" href="/css/trends.css" />
+  </head>
+  <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get userId and petOwnerId from localStorage
+        var userId = localStorage.getItem("userId");
+        var petOwnerId = localStorage.getItem("petOwnerId");
+
+        // Redirect the pages
+        document.querySelector(".logo").href = `/petOwnerWelcome?userId=${userId}`;
+        document.querySelector(".profile-link").href = `/petOwnerProfile?petOwnerId=${petOwnerId}`;
+        document.getElementById('home-link').href = `/petOwnerWelcome?userId=${userId}`;
+        document.getElementById('pets-link').href = `/petList?petOwnerId=${petOwnerId}`;
+        document.getElementById('prescription-link').href = `/prescriptions?petOwnerId=${petOwnerId}`;
+
+        // FIX: Change these links when the pages are implemented
+        const faqLink = document.getElementById("faq-link");
+      });
+    </script>
+  <body>
+    <div class="header">
+      <a href="/" class="logo">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a href="#" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="navbar">
+      <ul>
+        <li><a href="/" id="home-link">Home</a></li>
+        <li><a href="#pets" id="pets-link">Pets</a></li>
+        <li><a href="javascript:void(0)" class="active">Articles & Videos</a></li>
+        <li><a href="#prescriptions" id="prescription-link">Prescriptions</a></li>
+        <li><a href="/faqPage" id="faq-link">FAQ</a></li>
+      </ul>
+    </div>
+
+    <div class="content-container">
+      <div class="trends-content">
+        <h1>Latest Trends</h1>
+
+        <!-- Articles Section -->
+        <div class="main-article" onclick="navigateTo('/article3')">
+          <img
+            src="/images/article10.jpg"
+            alt="Main article image"
+            class="article-image"
+          />
+          <div class="main-article-content">
+            <h2>10 Dangers of Fleas, Ticks and Mosquitoes</h2>
+            <p>
+              Fleas and ticks are among the most common external parasites in
+              pets. Pesky mosquitoes also enjoy feasting on dogs and cats...
+            </p>
+            <p>
+              All pets—even indoor pets—are at risk of fleas, ticks, and
+              mosquitoes. These little bloodsuckers can hitch a ride inside on
+              you or a pet and make themselves at home...
+            </p>
+            <p>
+              Keep reading to learn more about the dangers fleas, ticks, and
+              mosquitoes pose and how to protect your pet (and yourself).
+            </p>
+          </div>
+        </div>
+
+        <div class="recent-articles">
+          <h2>Recent Articles</h2>
+
+          <div class="recent-article" onclick="navigateTo('/article1')">
+            <img src="/images/article11.jpg" alt="Article image" />
+            <div class="article-text">
+              <h3>Can Dogs Get Seasonal Depression?</h3>
+              <p>
+                You may have experienced mood changes as the seasons shift and
+                long, sunny days become darker and shorter...
+              </p>
+            </div>
+          </div>
+
+          <div class="recent-article" onclick="navigateTo('/article2')">
+            <img src="/images/article12.jpg" alt="Article image" />
+            <div class="article-text">
+              <h3>Adopting a Cat? 12 Cat Adoption Mistakes to Avoid</h3>
+              <p>
+                Adopting a new cat is incredibly exciting. From picking out the
+                perfect name to readying the ultimate cat-friendly casa...
+              </p>
+            </div>
+          </div>
+        </div>
+        <button class="view-more-btn" onclick="navigateTo('/articlesPage')">
+          View More Articles
+        </button>
+
+        <!-- Latest Videos Section -->
+        <div class="latest-videos">
+          <h2>Latest Videos</h2>
+          <div class="video-grid">
+            <div class="video-card" data-video-id="n3OwgFrZ4zY">
+              <img src="/images/vidThumbnail1.jpg" alt="Video 1" />
+              <p>Beginner's Guide to Care for a Pet Rabbit!</p>
+            </div>
+            <div class="video-card" data-video-id="zlljYjfejIg">
+              <img src="/images/vidThumbnail2.jpg" alt="Video 2" />
+              <p>Chinchilla as Pet - Pros and Cons Chinchillas as Pet</p>
+            </div>
+            <div class="video-card" data-video-id="UqswCFhhPPg">
+              <img src="/images/vidThumbnail3.jpg" alt="Video 3" />
+              <p>
+                Love Birds as Pets: The Pros and Cons of Keeping Love Birds as
+                Pet
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <button class="view-more-btn" onclick="navigateTo('/videos')">
+          View More Videos
+        </button>
+      </div>
+    </div>
+
+    <!-- Modal for YouTube Video -->
+    <div id="videoModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="videoContainer"></div>
+      </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+      // Function to handle page navigation
+      function navigateTo(url) {
+        window.location.href = url;
+      }
+
+      // Modal functionality for video popup
+      document.addEventListener("DOMContentLoaded", function () {
+        var modal = document.getElementById("videoModal");
+        var videoContainer = document.getElementById("videoContainer");
+        var span = document.getElementsByClassName("close")[0];
+        var videoCards = document.getElementsByClassName("video-card");
+
+        for (var i = 0; i < videoCards.length; i++) {
+          videoCards[i].addEventListener("click", function () {
+            var videoId = this.getAttribute("data-video-id");
+            videoContainer.innerHTML =
+              '<iframe src="https://www.youtube.com/embed/' +
+              videoId +
+              '?autoplay=1" frameborder="0" allowfullscreen></iframe>';
+            modal.style.display = "block";
+          });
+        }
+
+        span.onclick = function () {
+          modal.style.display = "none";
+          videoContainer.innerHTML = "";
+        };
+
+        window.onclick = function (event) {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            videoContainer.innerHTML = "";
+          }
+        };
+      });
+    </script>
+  </body>
+</html>

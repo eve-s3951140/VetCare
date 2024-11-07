@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Register Pets</title>
+    <link rel="stylesheet" href="/css/veterinarianRegister.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the petOwnerId from localStorage
+        const petOwnerId = localStorage.getItem("petOwnerId");
+
+        // Get the back button
+        const backButton = document.getElementById("backButton");
+
+        // Get the previous URL
+        const previousURL = document.referrer;
+
+        if (previousURL.includes("petOwnerRegister")) {
+          // Redirect to the login page if the user is not logged in
+          backButton.addEventListener("click", function () {
+            window.location.href = "petOwnerRegister?deleteUser=true";
+          });
+        } else if (previousURL.includes("petList")) {
+          // Redirect to the pet list page if the user is logged in
+          backButton.addEventListener("click", function () {
+            window.location.href = "petList?petOwnerId=" + petOwnerId;
+          });
+        }
+      });
+
+      var nextPetID = 1;
+      var numPets = 1;
+      console.log(numPets);
+
+      function validateForm() {
+        // Collect all required fields
+        var requiredFields = document.querySelectorAll("[required]");
+
+        // Needs more robust validation probably
+
+        // Loop through required fields to check if any are empty
+        for (var i = 0; i < requiredFields.length; i++) {
+          if (!requiredFields[i].value) {
+            alert("Please fill in all required fields.");
+            return false;
+          }
+        }
+        return true;
+      }
+
+      function extractFields(fieldName) {
+        // Extracts all the values of a specific type from the form
+        // and puts them into an array.
+        // e.g. - takes all the pet names and produces an array of all of them.
+        var fieldElements = document.getElementsByClassName(fieldName);
+        var values = [];
+
+        for (var i = 0; i < fieldElements.length; i++) {
+          // For optional fields (allergies and existing conditions)
+          // autofill with "None" because otherwise an outOfIndex error is caused.
+          if (fieldElements[i].value === "") {
+            values.push("None");
+          } else {
+            values.push(fieldElements[i].value);
+          }
+        }
+
+        return values;
+      }
+
+      async function saveForm() {
+        if (validateForm()) {
+          // To submit the form and add pets to the database,
+          // we create a FormData object which holds all the fields
+          // and an array with the corresponding data.
+          var formData = new FormData();
+
+          // Get the petOwnerID from lcoal storage, if there.
+          const petOwnerId = localStorage.getItem("petOwnerId");
+
+          formData.append("petName", extractFields("petName"));
+          formData.append("dob", extractFields("dob"));
+          formData.append("gender", extractFields("gender"));
+          formData.append("petType", extractFields("petType"));
+          formData.append("breed", extractFields("breed"));
+          formData.append("weight", extractFields("weight"));
+          formData.append("allergies", extractFields("allergies"));
+          formData.append(
+            "existingCondition",
+            extractFields("existingCondition")
+          );
+
+          // If there is no petOwnerId in local storage,
+          // send the request with -1 as the petOwnerID to singal this registration
+          // is coming from a new account.
+          if (petOwnerId === null) {
+            formData.append("petOwnerId", -1);
+          } else {
+            //Send the existing ID otherwise.
+            formData.append("petOwnerId", petOwnerId);
+          }
+
+          // Because the form is dynamic, we cannot submit it directly through html.
+          // We cannot account for the varying number of fields, after all.
+          // Instead, we have to make a post request with the form data to add the pets to the database.
+          try {
+            const response = await fetch("/petRegister", {
+              method: "POST",
+              body: formData,
+            });
+
+            // Redirect the user to the login page or pet list through javascript accordingly.
+            if (petOwnerId === null) {
+              window.location.replace("/login");
+            } else {
+              window.location.replace(`/petList?petOwnerId=${petOwnerId}`);
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }
+      }
+
+      function createLabel(name, labelText, required = true) {
+        // Create a new label with the red star at the end if the field required.
+        // Used when adding a new pet.
+        // Label is made according to the original form in the html.
+        const redStar = document.createElement("span");
+        redStar.textContent = "*";
+        redStar.setAttribute("style", "color: red");
+
+        const newLabel = document.createElement("label");
+        newLabel.htmlFor = name;
+        newLabel.textContent = labelText;
+
+        if (required) {
+          newLabel.appendChild(redStar);
+        }
+
+        return newLabel;
+      }
+
+      function createInput(name, inputType, required = true) {
+        //Creates a new input field.
+        const newInput = document.createElement("input");
+        newInput.type = inputType;
+        newInput.className = name;
+        newInput.name = name;
+        newInput.required = required;
+
+        return newInput;
+      }
+
+      function createSelect(name, optionValues, optionTexts, required = true) {
+        // Creates a new option menu.
+        // optionValues and optionTexts must be of equal lengths for this to work.
+        // Could also be re-factored with a hashmap but this works for now.
+        const newSelect = document.createElement("select");
+        newSelect.className = name;
+        newSelect.name = name;
+
+        for (var i = 0; i < optionValues.length; i++) {
+          const newOption = document.createElement("option");
+          newOption.value = optionValues[i];
+          newOption.textContent = optionTexts[i];
+          newSelect.appendChild(newOption);
+        }
+
+        newSelect.required = required;
+
+        return newSelect;
+      }
+
+      function addPet() {
+        // Creates a new form for a new pet.
+        // The reason I'm not just cloning other elements in the document is that
+        // in the case there is no pet, there is nothing to clone from.
+        numPets++;
+        nextPetID++;
+        console.log(numPets);
+
+        var newFormID = "pet" + nextPetID;
+
+        const newFormDiv = document.createElement("div");
+        newFormDiv.id = newFormID;
+        newFormDiv.className = "petInfo";
+
+        // Name label and input
+        const formNameLabel = createLabel("petName", "Full Name");
+        const formName = createInput("petName", "text");
+
+        // Date of birth label and input
+        const formDOBLabel = createLabel("dob", "Date of Birth");
+        const formDOB = createInput("dob", "date");
+
+        // Gender label and input
+        const formGenderLabel = createLabel("gender", "Gender");
+        const genderValues = ["male", "female"];
+        const genderTexts = ["Male", "Female"];
+        const formGender = createSelect("gender", genderValues, genderTexts);
+
+        // Pet type label and input
+        const formTypeLabel = createLabel("petType", "Pet Type");
+        const typeValues = [
+          "dog",
+          "cat",
+          "rabbit",
+          "bird",
+          "fish",
+          "hamster",
+          "horse",
+          "other",
+        ];
+        const typeTexts = [
+          "Dog",
+          "Cat",
+          "Rabbit",
+          "Bird",
+          "Fish",
+          "Hamster",
+          "Horse",
+          "Other",
+        ];
+        const formType = createSelect("petType", typeValues, typeTexts);
+
+        //Breed label and input
+        const formBreedLabel = createLabel("breed", "Breed");
+        const formBreed = createInput("breed", "text");
+
+        // Weight label and input
+        const formWeightLabel = createLabel("weight", "Weight (kg)");
+        const formWeight = createInput("weight", "number");
+
+        // Health Concerns h2
+        const healthConcerns = document.createElement("h2");
+        healthConcerns.textContent = "Health Concerns";
+
+        // Allergies label and input
+        const formAllergiesLabel = createLabel("allergies", "Allergies", false);
+        const formAllergies = createInput("allergies", "text", false);
+
+        // Existing conditions label and input
+        const formConditionsLabel = createLabel(
+          "existingCondition",
+          "Existing Condition",
+          false
+        );
+        const formConditions = createInput("existingCondition", "text", false);
+
+        // Remove pet button
+        const removalButton = document.createElement("button");
+        removalButton.type = "button";
+        removalButton.textContent = "Remove Pet";
+        removalButton.dataset.petNumber = nextPetID;
+        removalButton.setAttribute(
+          "onclick",
+          "removePet(this.dataset.petNumber)"
+        );
+
+        // Append all the created elements to the new form
+        // This is so many things and there is probably a better way lol
+        newFormDiv.appendChild(formNameLabel);
+        newFormDiv.appendChild(formName);
+        newFormDiv.appendChild(formDOBLabel);
+        newFormDiv.appendChild(formDOB);
+        newFormDiv.appendChild(formGenderLabel);
+        newFormDiv.appendChild(formGender);
+        newFormDiv.appendChild(formTypeLabel);
+        newFormDiv.appendChild(formType);
+        newFormDiv.appendChild(formBreedLabel);
+        newFormDiv.appendChild(formBreed);
+        newFormDiv.appendChild(formWeightLabel);
+        newFormDiv.appendChild(formWeight);
+
+        newFormDiv.appendChild(healthConcerns);
+
+        newFormDiv.appendChild(formAllergiesLabel);
+        newFormDiv.appendChild(formAllergies);
+        newFormDiv.appendChild(formConditionsLabel);
+        newFormDiv.appendChild(formConditions);
+
+        newFormDiv.appendChild(removalButton);
+
+        const fullForm = document.getElementById("allPets");
+        fullForm.appendChild(newFormDiv);
+      }
+
+      function removePet(petID) {
+        // Removes a pet form.
+        // Should maybe ask for confirmation first.
+        var divID = "pet" + petID;
+        console.log(divID);
+
+        numPets--;
+
+        var pet = document.getElementById(divID);
+        pet.remove();
+      }
+    </script>
+  </head>
+
+  <body>
+    <div class="header">
+      <a href="/login">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+    </div>
+
+    <div class="registration-form">
+      <h1>Pet Registration</h1>
+
+      <div class="section-divider"></div>
+
+      <h2>Add Pet</h2>
+      <form
+        id="petForm"
+        th:action="@{/petRegister}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <button type="button" onclick="addPet()">Add Pet</button>
+
+        <div id="allPets">
+          <div id="pet0" class="petInfo">
+            <!-- Pet Information Section -->
+            <label for="petName"
+              >Full Name<span style="color: red">*</span></label
+            >
+            <input type="text" class="petName" name="petName" required />
+
+            <label for="dob"
+              >Date of Birth<span style="color: red">*</span></label
+            >
+            <input type="date" class="dob" name="dob" required />
+
+            <label for="gender">Gender<span style="color: red">*</span></label>
+            <select class="gender" name="gender" required>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+
+            <label for="petType"
+              >Pet Type<span style="color: red">*</span></label
+            >
+            <select class="petType" name="petType" required>
+              <option value="dog">Dog</option>
+              <option value="cat">Cat</option>
+              <option value="rabbit">Rabbit</option>
+              <option value="bird">Bird</option>
+              <option value="fish">Fish</option>
+              <option value="hamster">Hamster</option>
+              <option value="horse">Horse</option>
+              <option value="other">Other</option>
+            </select>
+
+            <label for="breed">Breed<span style="color: red">*</span></label>
+            <input type="text" class="breed" name="breed" required />
+
+            <label for="weight"
+              >Weight (kg)<span style="color: red">*</span></label
+            >
+            <input type="number" class="weight" name="weight" required />
+
+            <!-- Health Concern Section -->
+            <h2>Health Concerns</h2>
+            <label for="allergies">Allergies</label>
+            <input type="text" class="allergies" name="allergies" />
+
+            <label for="existingCondition">Existing Condition</label>
+            <input
+              type="text"
+              class="existingCondition"
+              name="existingCondition"
+            />
+
+            <button
+              type="button"
+              data-pet-number="0"
+              onclick="removePet(this.dataset.petNumber)"
+            >
+              Remove pet
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <!-- Back and Continue Buttons -->
+      <div class="button-container">
+        <button type="button" id="backButton">Back</button>
+        <!-- Direct to Profile page -->
+        <button type="submit" onclick="saveForm();">Submit</button>
+      </div>
+    </div>
+  </body>
+</html>

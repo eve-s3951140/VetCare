@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article 3</title>
+    <link rel="stylesheet" href="/css/articles.css" />
+  </head>
+  <script>
+    // Function to go back to the previous page when the back button is clicked
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the userId and petOwnerId from local storage
+      const userId = localStorage.getItem("userId");
+      const petOwnerId = localStorage.getItem("petOwnerId");
+
+      const backButton = document.getElementById("backButton");
+
+      backButton.addEventListener("click", function () {
+        window.history.back();
+      });
+
+      const profileLink = document.getElementById("profileLink");
+      const logoLink = document.getElementById("logoLink");
+
+      if (profileLink) {
+        profileLink.addEventListener("click", function () {
+          window.location.href = "/petOwnerProfile?petOwnerId=" + petOwnerId;
+        });
+      }
+
+      if (logoLink) {
+        logoLink.addEventListener("click", function () {
+          window.location.href =
+            "/petOwnerWelcome?userId=" + userId + "&petOwnerId=" + petOwnerId;
+        });
+      }
+    });
+  </script>
+  <body>
+    <div class="header">
+      <a id="logoLink">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a class="profile-link" id="profileLink">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="article-content">
+      <h1 class="article-title">10 Dangers of Fleas, Ticks and Mosquitoes</h1>
+
+      <div class="article-header-image">
+        <img src="/images/article3.jpg" alt="Main article image" />
+      </div>
+
+      <!-- Author Credit Section -->
+      <div class="article-author">
+        <p>Written by: <strong>Author Name</strong></p>
+        <p>
+          Reviewed by: <strong>Reviewer Name</strong>, on 00/00/00, Published on
+          00/00/00
+        </p>
+      </div>
+
+      <div class="article-text-section">
+        <p>
+          Fleas and ticks are among the most common external parasites in pets.
+          Pesky mosquitoes also enjoy feasting on dogs and cats. Not only do
+          fleas, ticks, and mosquitoes cause intense itchiness, but they also
+          transmit diseases that can make pets seriously, and sometimes fatally,
+          ill.
+        </p>
+        <p>
+          All pets—even indoor pets—are at risk of fleas, ticks, and mosquitoes.
+          These little bloodsuckers can hitch a ride inside on you or a pet and
+          make themselves at home. That’s why veterinarians often recommend
+          year-round parasite protection for pets, such as Simparica Trio for
+          dogs or Revolution Plus for cats.
+        </p>
+        <p>
+          Keep reading to learn more about the dangers fleas, ticks, and
+          mosquitoes pose and how to protect your pet (and yourself).
+        </p>
+      </div>
+
+      <div class="article-image-with-text">
+        <img src="/images/article6.jpg" alt="Side article image" />
+        <div class="side-text">
+          <h2>How to Protect Your Pet from Fleas, Ticks and Mosquitoes</h2>
+          <p>
+            Protecting your pet from fleas, ticks, and mosquitoes is essential
+            and requires a multi-pronged approach that involves treating your
+            pet and the inside and outside of your home.
+          </p>
+          <p>
+            The strategies listed below offer easy, convenient, and affordable
+            ways to protect dogs, cats, and your household from pesky (and
+            dangerous) parasites. Be sure to speak with your veterinarian to
+            choose the most appropriate flea, tick, and mosquito protections for
+            your pet and location.
+          </p>
+        </div>
+      </div>
+
+      <div class="article-text-section">
+        <h2>5 Dangers of Fleas, Ticks and Mosquitoes</h2>
+        <h2>Flea Allergy Dermatitis</h2>
+        <p>
+          Dogs and cats aren’t just irritated by flea bites. They can also be
+          allergic to them. A flea’s saliva has substances like enzymes and
+          histamines that a pet’s immune system recognizes as foreign,
+          triggering an immune reaction. This reaction leads to symptoms like
+          intense scratching and biting of the skin, crusting, hair loss, hot
+          spots, and secondary infections.
+        </p>
+
+        <h2>Flea-Borne Diseases</h2>
+        <p>
+          Fleas are notorious for transmitting diseases that can make pets ill.
+          One such disease is murine typhus, caused by the bacteria
+          <em>Rickettsia typhi</em>. Another disease is bartonellosis (‘cat
+          scratch disease’), caused by the bacteria
+          <em>Bartonella henselae</em>. Fleas also spread the plague.
+        </p>
+
+        <h2>Tapeworm Infection</h2>
+        <p>
+          Pets can get tapeworms by swallowing adult fleas that carry tapeworm
+          larvae (immature tapeworms). These larvae then develop into adults in
+          a pet’s digestive system. The segments of an adult tapeworm resemble
+          grains of white rice and exit the body in a pet’s poop. Tapeworms are
+          easily treated with a drug called praziquantel, which kills the
+          tapeworms in the intestine.
+        </p>
+
+        <h2>Flea Infestations</h2>
+        <p>
+          As if flea bites aren’t bad enough, flea infestations can be even
+          worse. Fleas can’t fly, but they can jump up to 2 feet, a very
+          impressive feat given their tiny size. This jumping ability means
+          fleas can jump from pet to pet and even from pet to human. So, if one
+          of your pets has fleas, it may not be long before all of your pets and
+          you begin feeling itchy from flea bites.
+        </p>
+
+        <h2>Tick-Borne Diseases</h2>
+        <p>
+          Ticks can carry numerous infectious diseases in their little bodies
+          that affect pets, such as Lyme disease, Rocky Mountain spotted fever,
+          anaplasmosis, ehrlichiosis, and babesiosis. Generally, tick-borne
+          diseases are more commonly seen in dogs than cats.
+        </p>
+
+        <h2>Tick Paralysis</h2>
+        <p>
+          Tick paralysis in dogs and cats is caused by toxins in a tick’s saliva
+          that attack the nervous system. An affected pet’s muscles gradually
+          become paralyzed, leaving them unable to walk, eat, and breathe. Ticks
+          most associated with tick paralysis are the American dog tick.
+        </p>
+      </div>
+
+      <!-- Section with the image on the right -->
+      <div class="article-image-with-text image-right">
+        <img src="/images/article5.jpg" alt="Side article image" />
+        <div class="side-text">
+          <h2>Treating your pet</h2>
+          <h2>Year-Round Flea and Tick Control</h2>
+          <p>
+            This is the best strategy for preventing flea and tick infestations.
+            All dogs and cats in your home must be on a flea and tick control
+            product. These range from over-the-counter flea and tick sprays or
+            collars to prescription oral and topical preventatives, such as
+            Simparica chewables for dogs and Revolution topical treatments for
+            dogs and cats.
+          </p>
+
+          <h2>Regular Tick Checks</h2>
+          <p>
+            Check your pet for ticks anytime you go outside, especially if you
+            stroll through the woods, where ticks love hiding in tall grasses
+            and on trees.
+          </p>
+
+          <h2>Flea Combs</h2>
+          <p>
+            Flea combs are an inexpensive way to remove fleas and flea eggs from
+            your pet. Use a flea comb along with a flea and tick control
+            product.
+          </p>
+
+          <h2>Mosquito Repellent</h2>
+          <p>
+            Pet-safe mosquito repellents are available to protect your pet from
+            mosquitoes when outside. Ask your veterinarian for recommendations
+            for pet-safe repellents.
+          </p>
+
+          <h2>Stay Indoors During Peak Hours</h2>
+          <p>
+            Mosquitoes are most active at dawn and dusk. Keeping your pet
+            indoors as much as possible, especially at dawn and dusk, will help
+            protect your pet from mosquitoes.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Back button to go to the previous page -->
+    <button class="back-button" id="backButton">Back</button>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prescription List</title>
+    <link rel="stylesheet" href="/css/prescriptionList.css" />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <div class="header">
+      <a th:href="@{/petOwnerWelcome(userId=${petOwner.user.id})}" id="logo-link">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a th:href="@{/petOwnerProfile(petOwnerId=${petOwner.id})}" class="profile-link">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <!-- Navbar Section -->
+    <div class="nav-bar">
+      <a th:href="@{/petOwnerWelcome(userId=${petOwner.user.id})}">Home</a>
+      <a th:href="@{/petList(petOwnerId=${petOwner.id})}">Pets</a>
+      <a href="/trendsHome">Articles & Videos</a>
+      <a href="javascript:void(0)" class="active">Prescriptions</a>
+      <a href="/faqPage">FAQ</a>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="container">
+      <h1>My Pet Medications</h1>
+
+      <!-- List of Prescriptions -->
+      <div th:each="prescription : ${prescriptions}">
+        <div class="prescription-card">
+          <!-- Display Medicine Name -->
+          <h2
+            th:text="${prescription.medicine.name}"
+          >
+            Medicine Name
+          </h2>
+
+          <!-- Display Dosage and Frequency -->
+          <p>
+            Feed <span th:text="${prescription.dosage}">X</span> tablets
+            <span th:text="${prescription.dailyFrequency} + ' times a day'"
+              >times a day</span
+            >
+            for <span th:text="${prescription.duration}">Y</span> days.
+          </p>
+
+          <!-- Instructions -->
+          <p>
+            Instructions: <span th:text="${prescription.instruction}"></span>
+          </p>
+
+          <!-- For: Pet's Name -->
+          <p>For: <span th:text="${prescription.appointment.pet.name}"></span></p>
+
+          <!-- Refill Button, sending prescriptionId as parameter -->
+          <p th:switch="${prescription.order.status}">
+
+            <span th:case="'Delivered'">This prescription has been delivered.</span>
+
+            <span th:case="'Waiting for pickup'">This prescription is ready to be collected. Check with your post office!</span>
+
+            <span th:case="'Pending'">
+              <a
+                th:href="@{/refillPrescription(prescriptionId=${prescription.id})}"
+                class="request-refill-btn"
+              ><img src="/images/shopping-cart.png" alt="Cart" class="cart-icon" />
+                Request refill
+              </a>
+            </span>
+            
+            <span th:case="*">This order is being processed.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

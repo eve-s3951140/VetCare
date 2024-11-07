@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ</title>
+    <link rel="stylesheet" href="/css/faqPage.css" />
+  </head>
+  <script>
+    // Function to go back to the previous page when the back button is clicked
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get the userId and petOwnerId from local storage
+        const userId = localStorage.getItem("userId");
+        const petOwnerId = localStorage.getItem("petOwnerId");
+
+        const backButton = document.getElementById("backButton");
+
+        backButton.addEventListener("click", function () {
+            window.history.back();
+        });
+
+        const profileLink = document.getElementById("profileLink");
+        const logoLink = document.getElementById("logoLink");
+
+        if (profileLink) {
+            profileLink.addEventListener("click", function () {
+            window.location.href = "/petOwnerProfile?petOwnerId=" + petOwnerId;
+            });
+        }
+
+        if (logoLink) {
+            logoLink.addEventListener("click", function () {
+            window.location.href =
+                "/petOwnerWelcome?userId=" + userId + "&petOwnerId=" + petOwnerId;
+            });
+        }
+        
+        const questions = document.querySelectorAll(".question");
+
+        questions.forEach(function (question) {
+            question.addEventListener("click", function () {
+                // Toggle active class
+                question.classList.toggle("active");
+            });
+        });
+    });
+  </script>
+
+  <body>
+    
+    <!-- Header Section -->
+    <div class="header">
+        <a id="logoLink">
+            <img src="/images/logo.png" alt="Logo" class="logo" />
+        </a>
+        <a id="profileLink" class="profile-link">
+            <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+        </a>
+    </div>
+
+    <!-- Main section -->
+    <div class="main-content">
+        
+        <div class="hero-image">
+            <img src="/images/faqHero.jpg" alt="Hero Image">
+            <div class="hero-text">
+              <h1>FAQ</h1>
+            </div>
+        </div>
+        
+        <h1 >Common Questions From Our Customer</h1>
+
+        <br>
+
+        <h2>About VetCare</h2>
+        <div class="faq-item">
+            <h4 class="question">Why is a veterinary clinic important?<span class="icon"></span></h4>
+            <p class="answer">Veterinary clinics provide a range of high-quality services to meet the health and wellbeing needs of your pet. Taking your pet to the vet regularly is essential at every stage of their life. Whether it be for preventative health, general care, vaccinations or emergency vet care, our clinics are committed to taking loving care of your pet.</p>
+
+            <h4 class="question">What are 5 things veterinarians do?<span class="icon"></span></h4>
+            <div class="answer">
+                <p>At VetCare, we have a range of services to provide the best care possible care for your pets. The 5 main things our veterinarians do are:</p>    
+                <ul>
+                    <li>Preventative Health Consultations: tailored for your pets lifestage</li>
+                    <li>Pet Vaccinations: specific for the area you live and risk your pet may face</li>
+                    <li>Innovative specialised surgical procedures: endoscopy, bronchoscopy and advance orthopaedics</li>    
+                    <li>Pet de-sexing: including minimally invasive desexing</li>    
+                    <li>Boarding and grooming</li>   
+                </ul>
+            </div>
+        </div>
+
+        <br>
+
+        <h2>Pet Medication</h2>
+        <div class="faq-item">
+            <h4 class="question">Can I please get a repeat prescription for my pet's medication?<span class="icon"></span></h4>
+            <p class="answer">For all medications, including for the ongoing treatment of illnesses, we will need to see your pet for a 6 monthly check up to monitor their health through a physical examination and a blood test. This helps us to ensure that your pet is receiving the right dosage and adjust treatment, as necessary. In between the 6-month checkups, Vetmed are happy to offer repeat prescriptions for most ongoing medications. Please talk to one of our team today about your pet’s medication or to place an order.</p>
+        </div>
+        
+        <br>
+
+        <h2>Preventative Health</h2>
+        <div class="faq-item">
+            <h4 class="question">What vaccines do dogs actually need?<span class="icon"></span></h4>
+            <div class="answer">
+                <p>Vaccinations are an important way of safely and effectively protecting your pet from several serious diseases. The C5 vaccination is highly recommended for all Australian dogs, as it protects against:</p>
+                <ul>
+                    <li>Parvovirus</li>
+                    <li>Distemper</li>
+                    <li>Infectious canine hepatitis</li>
+                    <li>Canine cough – including Parainfluenza virus and Bordetella bacteria</li>
+                    <li>In addition we have Leptospirosis vaccinations and Rabies Vaccinations for those pets that are at risk</li>
+                </ul>
+            </div>
+            
+
+            <h4 class="question">How often should a pet be vaccinated?<span class="icon"></span></h4>
+            <div class="answer">
+                <p>Your pets are assessed each year with a health check and an evaluation is made to determine the frequency of vaccinations. This takes in to account risk factors of exposure, travel requirements and your pets underlying health. It is particularly important to make sure new puppies and kittens are fully vaccinated, as their immune systems are still developing.
+                    Vaccinations are required:</p>
+                <ul>
+                    <li>6 to 8 weeks of age</li>
+                    <li>12 weeks of age</li>
+                    <li>16 weeks of age</li>
+                    <li>then Annually or Triannually for the rest of their life</li>
+                </ul>
+            </div>
+
+            <h4 class="question">How many times is a dog vaccinated?<span class="icon"></span></h4>
+            <p class="answer">The immune systems of new puppies take time to develop as they grow. During this growth phase, puppies require frequent visits to the vet for their early vaccinations. Once these initial vaccinations are done, our pets require an annual vaccination visit for the remainder of their lives.</p>
+
+            <h4 class="question">What are the 5 types of vaccines for animals?<span class="icon"></span></h4>
+            <div class="answer">
+                <p>There are 3 vaccines commonly known as “core” vaccinations to protect your dog and 2 for cats.</p>
+                <p>Dogs</p>
+                <p>The C3 vaccine protects against parvovirus, distemper, and hepatitis. The C4 vaccine also protects against parainfluenza, while C5 protects against all the above as well as Bordetella bacteria.</p>
+                <p>Generally, the C3 vaccine is given to your puppy at 6 to 8 weeks of age, all other future vaccinations will be C5.</p>
+                <p>Cats</p>
+                <p>The F3 vaccine protects your cat against both enteritis and cat flu (rhinotracheitis and calicivirus). The FIV vaccine protects your cat from feline aids virus.</p>    
+            </div>
+        </div>
+        
+        <br>
+
+        <h2>Veterinary Surgery</h2>
+        <div class="faq-item">
+            <h4 class="question">Do I need an appointment get prescription medication ?<span class="icon"></span></h4>
+            <p class="answer">If it is a new occurrence then yes, we will need to examine your pet. The most important concern is your pet’s welfare therefore an examination is necessary in determining the best path and treatment for your pet.  Most drugs have legal restrictions on their supply and a consultation is be required by law before they can be dispensed. If your pet has a reoccurring problem and is seen regularly, no longer than a 6 month period between consultations, then under most circumstances we are able to rescript the appropriate medications. To save yourself time and to prevent misunderstandings please phone with your request before coming to the clinic.</p>
+
+            <h4 class="question">How can I get my dog to take its tablet?<span class="icon"></span></h4>
+            <p class="answer">Dogs are not silly, they can smell tablets and won’t just eat them out of your hand like it is a treat. Try breaking the tablets up and mixing in with their dog food. You can also try placing the broken pieces inside a piece of soft cheese, sausage even pate works. Some dogs will try and hide the pill in their mouth then spit them out, so watch them for a minute or so to make sure the pill has been swallowed. If your dog will not eat the broken tablets in any type of food, place the tablet on the very back of the dogs mouth and hold the dogs mouth shut until they swallow the tablet.</p>
+        
+            <h4 class="question">How do I give my dog medicine that is liquid?<span class="icon"></span></h4>
+            <p class="answer">If you are on your own, it is best to try using a syringe (without the needle – your local vet can provide you with one). Hold the dogs mouth closed and insert the syringe in through the side of the mouth. If you have someone to help you, keep the mouth closed with one hand, with the nose facing upward, and with the other hand open the lower jaw. Then someone can inject into the mouth. Tickle the adams apple or block nose and your dog will swollow</p>
+        </div>
+    
+    </div>
+
+    <!-- Back button to go to the previous page -->
+    <button class="back-button" id="backButton">Back</button>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pet Owner Registration</title>
+    <link rel="stylesheet" href="/css/veterinarianRegister.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Clear localStorage data related to user registration when the page loads (as a precaution when the user navigates back to the registration page from the pet registration page)
+        localStorage.removeItem("email");
+        localStorage.removeItem("profileType");
+      });
+
+      function validateForm() {
+        var email = document.getElementById("email").value;
+        var confirmEmail = document.getElementById("confirmEmail").value;
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmPassword").value;
+
+        // Collect all required fields
+        var requiredFields = document.querySelectorAll("[required]");
+
+        // Loop through required fields to check if any are empty
+        for (var i = 0; i < requiredFields.length; i++) {
+          if (!requiredFields[i].value) {
+            alert("Please fill in all required fields.");
+            return false;
+          }
+        }
+
+        // If postal code is not a number or is more than 4 digits
+        if (isNaN(document.getElementById("postcode").value)) {
+          alert("Postal code must be a number.");
+          return false;
+        }
+        else if (document.getElementById("postcode").value.length !== 4) {
+          alert("Postal code must be 4 digits.");
+          return false;
+        }
+
+        if (email !== confirmEmail) {
+          alert("Email and Confirm Email do not match.");
+          return false;
+        }
+
+        if (password !== confirmPassword) {
+          alert("Password and Confirm Password do not match.");
+          return false;
+        }
+
+        return true;
+      }
+
+      function saveForm() {
+        if (validateForm()) {
+          // Collect form data excluding confirmEmail and confirmPassword
+          var formData = new FormData(document.querySelector("form"));
+
+          // Remove confirmEmail and confirmPassword from the FormData before saving
+          formData.delete("confirmEmail");
+          formData.delete("confirmPassword");
+
+          // Save only the user's email to localStorage
+          formData.forEach((value, key) => {
+            if (key === "email") {
+              localStorage.setItem(key, value);
+            }
+          });
+
+          // Save profile type as PETOWNER
+          localStorage.setItem("profileType", "PET_OWNER");
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a href="/">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+    </div>
+
+    <div class="registration-form">
+      <h1>Pet Owner Registration</h1>
+
+      <!-- Error Messages if Exists -->
+      <div th:if="${errorMessage != null}">
+        <script th:inline="javascript">
+          alert('[[${errorMessage}]]');
+        </script>
+      </div>
+
+      <form
+        id="petOwnerForm"
+        th:action="@{/petOwnerRegister}"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <div class="section-divider"></div>
+
+        <!-- Personal Information Section -->
+        <h2>Personal Information</h2>
+        <label for="firstName"
+          >First Name<span style="color: red">*</span></label
+        >
+        <input type="text" id="firstName" name="firstName" required />
+
+        <label for="lastname">Last Name<span style="color: red">*</span></label>
+        <input type="text" id="lastName" name="lastName" required />
+
+        <label for="dob">Date of Birth<span style="color: red">*</span></label>
+        <input type="date" id="dob" name="dob" required />
+
+        <label for="gender">Gender<span style="color: red">*</span></label>
+        <select id="gender" name="gender" required>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Others</option>
+        </select>
+
+        <label for="phone">Phone Number<span style="color: red">*</span></label>
+        <input type="tel" id="phone" name="phone" required />
+
+        <div class="section-divider"></div>
+
+        <!-- Current Residential Address Section -->
+        <h2>Current Residential Address</h2>
+        <label for="streetAddress"
+          >Street Address<span style="color: red">*</span></label
+        >
+        <input type="text" id="streetAddress" name="streetAddress" required />
+
+        <label for="suburb">Suburb<span style="color: red">*</span></label>
+        <input type="text" id="suburb" name="suburb" required />
+
+        <label for="state"
+          >State/Territory<span style="color: red">*</span></label
+        >
+        <input type="text" id="state" name="state" required />
+
+        <label for="postcode">Postcode<span style="color: red">*</span></label>
+        <input type="text" id="postcode" name="postcode" required />
+
+        <div class="section-divider"></div>
+
+        <!-- Account Information Section -->
+        <h2>Account Information</h2>
+        <label for="email">Email<span style="color: red">*</span></label>
+        <input type="email" id="email" name="email" required />
+
+        <label for="confirmEmail"
+          >Confirm Email<span style="color: red">*</span></label
+        >
+        <input type="email" id="confirmEmail" name="confirmEmail" required />
+
+        <label for="password">Password<span style="color: red">*</span></label>
+        <input type="password" id="password" name="password" required />
+
+        <label for="confirmPassword"
+          >Confirm Password<span style="color: red">*</span></label
+        >
+        <input
+          type="password"
+          id="confirmPassword"
+          name="confirmPassword"
+          required
+        />
+
+        <!-- Back and Continue Buttons -->
+        <div class="button-container">
+          <button type="button" onclick="window.location.href='register';">
+            Back
+          </button>
+          <!-- Direct to Pet Register page -->
+          <button type="submit" onclick="saveForm();">Continue</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

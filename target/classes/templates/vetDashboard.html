@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vet Dashboard</title>
+    <link rel="stylesheet" href="/css/vetDashboard.css" />
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Fetch the userId from the URL and store it in localStorage if not already set
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlUserID = urlParams.get("userId");
+
+        if (urlUserID && !localStorage.getItem("userId")) {
+          localStorage.setItem("userId", urlUserID);
+        }
+
+        // Fetch vet details based on userId through the API
+        const userID = localStorage.getItem("userId");
+        if (userID) {
+          fetch(`/api/vets/${userID}`)
+            .then((response) => response.json())
+            .then((data) => {
+              const vetID = data.id;
+              localStorage.setItem("vetId", vetID);
+            })
+            .catch((error) => console.error("Error fetching vet ID:", error));
+        }
+
+        // Remove the originalPreviousPage that is for petProfile from localStorage
+        localStorage.removeItem("originalPreviousPage");
+      });
+    </script>
+  </head>
+  <body>
+    <div class="header">
+      <a
+        th:href="@{/vetDashboard(userId=${userId}, vetId=${vetId})}"
+        id="logo-link"
+      >
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a
+        th:href="@{/vetProfile(vetId=${vetId})}"
+        id="profile-link"
+        class="profile-link"
+      >
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="nav-bar">
+      <a
+        th:href="@{/vetDashboard(userId=${userId}, vetId=${vetId})}"
+        class="active"
+        >Home</a
+      >
+      <a th:href="@{/patients(vetId=${vetId})}">Patients</a>
+      <a
+        th:href="@{/schedule(vetId=${vetId}, weekStart=${weekStart})}"
+        class="schedule-link"
+        >Schedule</a
+      >
+      <a th:href="@{/availability(vetId=${vetId})}"
+         class="availability-link"
+      >Availability</a>
+      <a th:href="@{/faqPage}">FAQ</a>
+    </div>
+
+    <div class="container">
+      <h1 id="welcomeName">Welcome, Doctor</h1>
+      <!-- Placeholder text, will be replaced by JS -->
+      <h2>Your Appointments Today</h2>
+      <div class="appointment">
+        <h3>
+          <span
+            th:text="${#temporals.format(today, 'EEEE, dd MMMM yyyy')}"
+          ></span>
+        </h3>
+
+        <div th:each="appointment, iterStat : ${appointments}">
+          <div class="appointment-card">
+            <h4
+              th:text="${iterStat.count + '. ' + appointment.appointmentType.name + ' at ' + appointment.startTime}"
+            ></h4>
+            <p>
+              <strong>Patient:</strong>
+              <span th:text="${appointment.pet.name}"></span>
+            </p>
+            <p>
+              <strong>Gender:</strong>
+              <span th:text="${appointment.pet.gender}"></span>
+            </p>
+            <p>
+              <strong>Species:</strong>
+              <span th:text="${appointment.pet.species}"></span>
+            </p>
+            <p>
+              <strong>Breed:</strong>
+              <span th:text="${appointment.pet.breed}"></span>
+            </p>
+            <hr />
+            <p>
+              <strong>Owner:</strong>
+              <span
+                th:text="${appointment.pet.petOwner.user.firstName + ' ' + appointment.pet.petOwner.user.lastName}"
+              ></span>
+            </p>
+            <p>
+              <strong>Gender:</strong>
+              <span th:text="${appointment.pet.petOwner.user.gender}"></span>
+            </p>
+            <p>
+              <strong>Email:</strong>
+              <span th:text="${appointment.pet.petOwner.user.email}"></span>
+            </p>
+            <p>
+              <strong>Number:</strong>
+              <span
+                th:text="${appointment.pet.petOwner.user.phoneNumber}"
+              ></span>
+            </p>
+            <div class="button-container">
+              <a th:href="@{/petProfile(petId=${appointment.pet.id})}">
+                <button>Pet Details</button>
+              </a>
+              <a
+                th:href="@{/petOwnerProfile(petOwnerId=${appointment.pet.petOwner.id})}"
+              >
+                <button>Pet Owner Details</button>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

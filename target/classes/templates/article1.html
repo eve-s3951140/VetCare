@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Article 1</title>
+    <link rel="stylesheet" href="/css/articles.css" />
+  </head>
+  <script>
+    // Function to go back to the previous page when the back button is clicked
+    document.addEventListener("DOMContentLoaded", function () {
+      // Get the userId and petOwnerId from local storage
+      const userId = localStorage.getItem("userId");
+      const petOwnerId = localStorage.getItem("petOwnerId");
+
+      const backButton = document.getElementById("backButton");
+
+      backButton.addEventListener("click", function () {
+        window.history.back();
+      });
+
+      const profileLink = document.getElementById("profileLink");
+      const logoLink = document.getElementById("logoLink");
+
+      if (profileLink) {
+        profileLink.addEventListener("click", function () {
+          window.location.href = "/petOwnerProfile?petOwnerId=" + petOwnerId;
+        });
+      }
+
+      if (logoLink) {
+        logoLink.addEventListener("click", function () {
+          window.location.href =
+            "/petOwnerWelcome?userId=" + userId + "&petOwnerId=" + petOwnerId;
+        });
+      }
+    });
+  </script>
+  <body>
+    <div class="header">
+      <a id="logoLink">
+        <img src="/images/logo.png" alt="Logo" class="logo" />
+      </a>
+      <a class="profile-link" id="profileLink">
+        <img src="/images/profile.png" alt="Profile" class="profile-icon" />
+      </a>
+    </div>
+
+    <div class="article-content">
+      <h1 class="article-title">Can Dogs Get Seasonal Depression?</h1>
+
+      <div class="article-header-image">
+        <img src="/images/article11.jpg" alt="Main article image" />
+      </div>
+
+      <!-- Author Credit Section -->
+      <div class="article-author">
+        <p>Written by: <strong>Author Name</strong></p>
+        <p>
+          Reviewed by: <strong>Reviewer Name</strong>, on 00/00/00, Published on
+          00/00/00
+        </p>
+      </div>
+
+      <div class="article-text-section">
+        <p>
+          You may have experienced mood changes as the seasons shift and long,
+          sunny days become darker and shorter, but can the same thing happen to
+          your dog? We know humans can suffer from seasonal affective disorder
+          (SAD). Is seasonal affective disorder in dogs something to worry
+          about?
+        </p>
+        <p>
+          To find out the answer to “Can dogs get seasonal depression,” we
+          talked to two veterinarians, Sandra Faeh, DVM, president of the
+          American Veterinary Medical Association, and Karen Fine, DVM in
+          Central Massachusetts, for the science behind behavior changes.
+        </p>
+      </div>
+
+      <div class="article-image-with-text">
+        <img src="/images/article2.jpg" alt="Side article image" />
+        <div class="side-text">
+          <h2>Can Dogs Get Seasonal Depression?</h2>
+          <p>
+            Seasonal affective disorder in dogs isn’t a known medical problem,
+            at least not in the way humans experience it, according to our
+            experts. That being said, your dog can experience mood fluctuations
+            — particularly during times of the year when their humans schedules
+            change.
+          </p>
+          <p>
+            Perhaps you had a young adult home for the summer who then moved
+            back to college at the start of the school year. Or, if your kids
+            were home all summer or other family members spent a lot of time
+            with your dog and then they returned to school or work, your dog
+            might be moping around a bit. This could lead you to ask, can dogs
+            get winter blues?
+          </p>
+          <p>
+            Some dogs are very routine-oriented, from their feeding times to
+            even putting themselves to bed, says Dr. Fine, author of The New
+            York Times bestseller The Other Family Doctor: A Veterinarian
+            Explores What Animals Can Teach Us about Love, Life, and Mortality.
+            For these dogs, a disruption like a person moving out or another pet
+            dying might have more of an impact than it would on another dog.
+          </p>
+        </div>
+      </div>
+
+      <div class="article-text-section">
+        <h2>
+          Signs your dog has the winter blues or is generally feeling down may
+          include:
+        </h2>
+        <p>
+          There are some physical or behavioral signs you might notice that
+          could indicate your dog isn’t feeling like themselves. Again, while
+          this isn’t technically referred to as seasonal depression, it’s still
+          possible for a dog to act depressed during the wintertime.
+        </p>
+        <ul>
+          <li>Decreased appetite</li>
+          <li>Sleeping in unusual locations</li>
+          <li>Loss of interest in playing or engaging with family</li>
+          <li>Unexpected weight loss</li>
+          <li>Self-soothing via licking or chewing</li>
+          <li>Vocalizing, such as howling or whimpering</li>
+          <li>
+            Sad facial expressions, such as pinning ears back or droopy eyes
+          </li>
+          <li>Staying close to family members</li>
+        </ul>
+        <p>
+          If your dog is exhibiting any of these signs, reach out to your
+          veterinarian.
+        </p>
+        <blockquote>
+          “One of the first things a veterinarian will ask when they do a
+          checkup on your dog will be something like, ‘Have there been any
+          changes in the household or routine?’” Dr. Fine says.
+        </blockquote>
+        <p>
+          Consider whether your dog is getting less attention than normal, for
+          instance, and if that could be playing a part in your dog’s sadness or
+          boredom.
+        </p>
+      </div>
+
+      <!-- Section with the image on the right -->
+      <div class="article-image-with-text image-right">
+        <img src="/images/article4.jpg" alt="Side article image" />
+        <div class="side-text">
+          <h2>How to Help a Dog Beat the Winter Blues</h2>
+          <p>
+            Seasonal affective disorder in dogs isn’t a known medical problem,
+            at least not in the way humans experience it, according to our
+            experts. That being said, your dog can experience mood fluctuations
+            — particularly during times of the year when their humans' schedules
+            change.
+          </p>
+          <p>
+            Perhaps you had a young adult home for the summer who then moved
+            back to college at the start of the school year. Or, if your kids
+            were home all summer or other family members spent a lot of time
+            with your dog and then they returned to school or work, your dog
+            might be moping around a bit. This could lead you to ask, can dogs
+            get winter blues?
+          </p>
+          <p>
+            Some dogs are very routine-oriented, from their feeding times to
+            even putting themselves to bed, says Dr. Fine, author of The New
+            York Times bestseller The Other Family Doctor: A Veterinarian
+            Explores What Animals Can Teach Us about Love, Life, and Mortality.
+            For these dogs, a disruption like a person moving out or another pet
+            dying might have more of an impact than it would on another dog.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Back button to go to the previous page -->
+    <button class="back-button" id="backButton">Back</button>
+  </body>
+</html>
